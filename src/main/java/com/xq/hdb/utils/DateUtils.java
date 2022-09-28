@@ -394,7 +394,7 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils
     }
 
     /**
-     * 将字符转为日期 刘涛
+     * 将字符转为日期
      * @param time
      * @return
      */
