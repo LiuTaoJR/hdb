@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xq.hdb.mapper.db1.JobSignalStatusMapper">
+
+
+
+
+    <!--判断是否存在此id的数据-->
+    <select id="getStatusList"  resultType="com.xq.hdb.entity.JobSignalStatus">
+        select ss.* from job_signal_status ss
+        left join job_signal_status_device ssd on ss.id = ssd.signalStatusId
+        left join job_signal_status_device_phase ssdp on ssd.id = ssdp.signalStatusDeviceId
+        <trim prefix="where" prefixOverrides="and | or">
+            <if test="deviceId != null  and deviceId != ''"> and ss.device_id = #{deviceId}</if>
+            <if test="jobId != null  and jobId != ''"> and ssdp.job_id = #{jobId}</if>
+            <if test="speed != null  and speed != ''"> and ssd.speed = #{speed}</if>
+            <if test="status != null  and status != ''"> and ssdp.status = #{status}</if>
+        </trim>
+    </select>
+
+
+
+    <!--根据日期获取数据总数-->
+    <select id="getSignalStatusCountByDate" resultType="java.lang.Integer">
+        select count(DISTINCT jss.id) from job_signal_status jss
+        left join job_signal_status_header jssh on jss.id = jssh.signalStatusId
+        <where>
+            <if test="deviceId != null  and deviceId != ''">
+                and jssh.device_id = #{deviceId}
+            </if>
+            <if test="startDate != null  and endDate != null  ">
+                and jss.create_time between #{startDate} and #{endDate}
+            </if>
+        </where>
+    </select>
+
+
+    <!--根据日期获取-->
+    <select id="getPullSignalStatusByDate" resultType="java.util.Map">
+        select id, device_id from job_signal_status where insert_date between #{startDate} and #{endDate}
+    </select>
+
+
+    <!--根据日期获取(分页获取)-->
+    <select id="pagingGetSignalStatusByDate" resultType="java.util.Map">
+        select distinct jss.id from job_signal_status jss
+        left join job_signal_status_header jssh on jss.id = jssh.signalStatusId
+
+        <where>
+            <if test="deviceId != null  and deviceId != ''">
+                and jssh.device_id = #{deviceId}
+            </if>
+            <if test="startDate != null  and endDate != null ">
+                and jss.create_time between #{startDate} and #{endDate}
+            </if>
+        </where>
+
+        order by jss.create_time desc
+        limit #{startIndex}, #{pageSize}
+    </select>
+
+    <select id="pageList" parameterType="java.lang.Integer" resultType="com.xq.hdb.entity.JobSignalStatus" >
+        select * from job_signal_status limit #{a},#{b}
+    </select>
+
+
+</mapper>

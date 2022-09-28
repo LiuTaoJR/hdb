@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<form id="param" href="#">
+密文：<input type="text" id="miwen">
+<input type="button" value="解密" id="btn" onclick="submitFun()">
+明文：<input type="text" id="mingwen">
+</form>
+</body>
+
+<script src="/js/jquery-3.3.1.js"></script>
+<script type="text/javascript">
+
+
+    function submitFun() {
+        var str = $("#miwen").val();
+
+
+        $.ajax({
+            url: "/code/decrypt",
+            type: "get",
+            data: {
+                "str": str
+            },
+            success: function (result) {
+                console.log(result);
+                $("#mingwen").val(result);
+            }
+        })
+    }
+
+</script>
+</html>

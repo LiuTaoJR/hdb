@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xq.hdb.mapper.db2.SqliteOtherMapper">
+
+
+
+    <!--获取库内所有表-->
+    <select id="getAllTable" resultType="java.lang.String">
+        SELECT name from sqlite_master where name like 'job%';
+    </select>
+
+
+    <!--刷新数据-->
+    <delete id="refreshData">
+        delete from ${table} where insert_date_month != #{insertDateMonth}
+    </delete>
+
+
+    <!--缩减数据文件-->
+    <update id="cutDBFile" >
+        vacuum;
+    </update>
+
+
+
+</mapper>

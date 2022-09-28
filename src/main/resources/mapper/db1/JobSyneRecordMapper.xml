@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xq.hdb.mapper.db1.JobSyncRecordMapper">
+
+
+
+
+    <!--判断是否存在此id的数据-->
+    <select id="getjobIdBySyncStatusJob" parameterType="java.lang.String" resultType="java.lang.String">
+        select job_id from job_sync_record where sync_status_job = #{status}
+    </select>
+
+
+    <!--判断是否存在此id的数据-->
+    <select id="getjobIdBySyncStatusWorkstep" parameterType="java.lang.String" resultType="java.lang.String">
+        select job_id from job_sync_record where sync_status_workstep = #{status}
+    </select>
+
+
+    <!--判断是否存在此id的数据-->
+    <select id="isExists" parameterType="java.lang.String" resultType="java.lang.Integer">
+        select count(id) from job_sync_record where job_id = #{jobId}
+    </select>
+
+
+
+    <update id="upsateSyncStatusJob">
+        update job_sync_record set sync_status_job = #{status} where job_id = #{jobId}
+    </update>
+
+
+
+    <update id="upsateSyncStatusWorkstep">
+        update job_sync_record set sync_status_workstep = #{status} where job_id = #{jobId}
+    </update>
+
+
+</mapper>

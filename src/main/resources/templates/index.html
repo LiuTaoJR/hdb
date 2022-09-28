@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+</head>
+<body>
+
+<div id="one">
+    <h5>消费订阅</h5>
+    <form id="param" href="#">
+        <select id="action" name="action" >
+            <option value="create">create</option>
+            <option value="delete" >delete</option>
+        </select>
+
+        <input id="url" type="text" name="url" value="http://192.168.1.166:10001">
+
+        <select id="type" name="type" >
+            <option value="">无</option>
+            <option value="StatusSignal">StatusSignal</option>
+            <option value="ResourceSignal" >ResourceSignal</option>
+        </select>
+        <input type="button" onclick="submitFun()" value="订  阅">
+    </form>
+</div>
+
+
+<div id="two">
+
+</div>
+
+
+
+
+
+
+<script src="/js/jquery-3.3.1.js"></script>
+<script type="text/javascript">
+
+
+   function submitFun() {
+       var action=$("#action option:selected").val();
+       var url = $("#url").val();
+       var type=$("#type option:selected").val();
+
+       $.ajax({
+           url: "/deviceActionSubscription/subscription",
+           type: "get",
+           data: {
+               "action": action,
+               "url": url,
+               "type": type
+           },
+           dataType: "json",
+           success: function (result) {
+               if(result.code != null){
+                   console.log(result.msg);
+                   $("#two").html(result.msg);
+               }
+           }
+       })
+   }
+
+</script>
+
+
+</body>
+</html>
