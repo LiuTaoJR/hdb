@@ -1,19 +1,15 @@
-package com.xq.hdb.entity;
-
+package com.xq.hdb.entity.decrypt;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.xq.hdb.utils.DateUtils;
 import lombok.Data;
-
-import java.text.SimpleDateFormat;
 import java.util.Date;
+
 
 @Data
 @TableName("job_sync_record")
-public class JobSyncRecord {
-
+public class JobSyncRecordNew {
 
     @TableId("id")
     private String id;
@@ -41,14 +37,4 @@ public class JobSyncRecord {
 
     @TableField("insert_date_month")
     private Integer insertDateMonth;
-
-
-    public static void main(String[] args) {
-        Date date = DateUtils.msToDate(1654828508439L);
-        java.text.SimpleDateFormat formatter = new SimpleDateFormat( "yyyy-MM-dd HH:mm:ss");
-        String dates = formatter.format(date);//格式化数据
-        System.out.println(dates);
-    }
-
-
 }

@@ -36,9 +36,6 @@ public class SignalRessourceController {
             @RequestParam(value = "deviceId", required = false) String deviceId,
             @RequestParam(value = "start", required = false) String eventId,
             @RequestParam(value = "end", required = false) String stutas) {
-
-
-
         return null;
     }
 

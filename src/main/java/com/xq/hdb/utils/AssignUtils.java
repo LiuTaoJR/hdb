@@ -5,6 +5,7 @@ import com.xq.hdb.config.HdbConstantConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.ObjectUtils;
 
+import java.nio.charset.StandardCharsets;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -228,9 +229,31 @@ public class AssignUtils {
         return s.replace("-", "");
     }
 
-
-
-
-
-
+    /**
+     * 转为utf-8的字符串
+     * @param string
+     * @return
+     */
+    public  static String toUtf8String(String string) {
+        StringBuilder stringBuilder = new StringBuilder();
+        for (int i = 0; i < string.length(); i++) {
+            char c = string.charAt(i);
+            if (c <= 255) {
+                stringBuilder.append(c);
+            } else {
+                byte[] b;
+                try {
+                    b = Character.toString(c).getBytes(StandardCharsets.UTF_8);
+                } catch (Exception ex) {
+                    b = new byte[0];
+                }
+                for (int value : b) {
+                    int k = value;
+                    if (k < 0) k += 256;
+                    stringBuilder.append("%").append(Integer.toHexString(k).toUpperCase());
+                }
+            }
+        }
+        return stringBuilder.toString();
+    }
 }

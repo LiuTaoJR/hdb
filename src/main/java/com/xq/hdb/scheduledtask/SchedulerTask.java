@@ -54,7 +54,6 @@ public class SchedulerTask {
     @Transactional
     @Scheduled(cron = "0 0/10 * * * ?")
     public synchronized void pullJob() throws InterruptedException {
-        //System.out.println("这是Job");
         log.info("SchedulerTask pullJob start：");
         jobService.pullJob();
 

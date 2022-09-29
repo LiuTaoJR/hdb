@@ -2,14 +2,21 @@ package com.xq.hdb;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.xq.hdb.entity.JobSyncRecord;
+import com.xq.hdb.entity.decrypt.JobSyncRecordNew;
+import com.xq.hdb.mapper.db1.JobSyncRecordMapper;
+import com.xq.hdb.mapper.db3.JobSyncRecordNewMapper;
 import com.xq.hdb.service.JobService;
 import com.xq.hdb.utils.AssignUtils;
 import com.xq.hdb.utils.DateUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -78,16 +85,20 @@ class HdbApplicationTests {
         return str;
     }
 
-    @Test void bb(){
-        List<String> list=new ArrayList<>();
-        list.add("qiaozhi");
-        list.add("kobe");
-        Map<String,Object> map=new HashMap<>();
-        map.put("aa","11");
-        map.put("bb",list);
-        log.info("+++++"+map);
+    @Autowired
+    private JobSyncRecordMapper jobSyncRecordMapper;
+
+    @Autowired
+    private JobSyncRecordNewMapper jobSyncRecordNewMapper;
+
+    @Test void bb() throws UnsupportedEncodingException {
+        String a=this.toUtf8String("缇庡厠姝ｆ壙440x380x270");
+        String b = URLDecoder.decode("%E7%BE%8E%E5%85%8B%E6%AD%A3%E6%89%BF440x380x270","utf-8");
+        System.out.println(b);
 
     }
+
+
 
 
 }
