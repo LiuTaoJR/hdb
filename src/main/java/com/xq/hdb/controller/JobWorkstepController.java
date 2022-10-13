@@ -19,7 +19,7 @@ import java.util.Map;
  */
 @Slf4j
 @RestController
-@RequestMapping("/pyx/api/HBD_DEVICE_MGR/workstep")
+@RequestMapping("/workstep")
 public class JobWorkstepController {
 
 

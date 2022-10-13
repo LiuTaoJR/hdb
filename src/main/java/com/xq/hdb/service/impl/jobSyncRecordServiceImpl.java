@@ -65,11 +65,11 @@ public class jobSyncRecordServiceImpl extends ServiceImpl<JobSyncRecordMapper, J
             }
 
             //未加密库的job_sync_record
-            int j =jobSyncRecordNewMapper.isExists(jobId);
+            int j =jobSyncRecordNewMapper.isExists(AssignUtils.decryptionToStr(jobId));
             if(j < 1){
                 JobSyncRecordNew recordNew = new JobSyncRecordNew();
                 recordNew.setId(id);
-                recordNew.setJobId(jobId);
+                recordNew.setJobId(AssignUtils.decryptionToStr(jobId));
                 recordNew.setSyncStatusJob("N");
                 recordNew.setSyncStatusWorkstep("N");
                 recordNew.setCreateTime(new Date());
@@ -85,7 +85,6 @@ public class jobSyncRecordServiceImpl extends ServiceImpl<JobSyncRecordMapper, J
         }
 
     }
-
 
 
 }

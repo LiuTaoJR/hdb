@@ -1,6 +1,6 @@
 # 项目相关配置
 server:
-  port: 10002
+  port: 10001
   tomcat:
     uri-encoding: UTF-8
     max-threads: 800
@@ -36,22 +36,27 @@ spring:
   datasource:
     db1:
       driver-class-name: com.mysql.cj.jdbc.Driver
-      jdbc-url: jdbc:mysql://localhost:3306/prinectsignaldaata?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=GMT%2B8&nuLlCatalogMeansCurrent=true
+      jdbc-url: jdbc:mysql://localhost:3306/prinectsignaldaata?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
       username: root
-      password: pyxMysql!
+      password: root
+      hikari:
+        maximum-pool-size: 50
 
     db2:
       driver-class-name:  com.mysql.cj.jdbc.Driver
-      jdbc-url: jdbc:mysql://localhost:3306/prinectjobdata?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=GMT%2B8&nuLlCatalogMeansCurrent=true
+      jdbc-url: jdbc:mysql://localhost:3306/prinectjobdata?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
       username: root
-      password: pyxMysql!
+      password: root
+      hikari:
+        maximum-pool-size: 50
 
     db3:
       driver-class-name: com.mysql.cj.jdbc.Driver
-      jdbc-url: jdbc:mysql://localhost:3306/prinectsignaldaata_copy?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=GMT%2B8&nuLlCatalogMeansCurrent=true
+      jdbc-url: jdbc:mysql://localhost:3306/prinectsignaldaata_copy_prod?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
       username: root
-      password: pyxMysql!
-
+      password: root
+      hikari:
+        maximum-pool-size: 50
 
 
 hdb:

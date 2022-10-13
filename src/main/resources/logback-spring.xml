@@ -59,6 +59,31 @@
         </triggeringPolicy>
     </appender>
 
+    <!-- info⽇志 -->
+    <appender name="myInfo" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!-- 过滤⽇志 -->
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>ERROR</level>
+            <onMatch>DENY</onMatch>  <!-- 如果命中就禁⽌这条⽇志 -->
+            <onMismatch>ACCEPT</onMismatch>  <!-- 如果没有命中就使⽤这条规则 -->
+        </filter>
+        <encoder>
+            <pattern>${LOG_PATTERN}</pattern>
+        </encoder>
+        <!-- 滚动策略 -->
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- 设置info⽇志路径 -->
+            <fileNamePattern>D:/hdb/signal_Info.%d.log.zip</fileNamePattern>
+        </rollingPolicy>
+        <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+            <!-- 单文件最大10MB -->
+            <maxFileSize>10MB</maxFileSize>
+        </triggeringPolicy>
+    </appender>
+
+    <logger name="com.xq.hdb.controller.ReceiveSubscriptionController" value="INFO" additivity="false">
+        <appender-ref ref="myInfo"/>
+    </logger>
 
     <!-- ⽇志输出级别 -->
     <root level="INFO">

@@ -3,18 +3,18 @@ package com.xq.hdb.controller;
 
 import com.xq.hdb.service.SignalStatusService;
 import com.xq.hdb.vo.SignalStatusVO;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-@Slf4j
 @RestController
-@RequestMapping("/pyx/api/HBD_DEVICE_MGR/signalStatus")
+@RequestMapping("/signalStatus")
 public class SignalStatusController {
+    private static final Logger logger = LoggerFactory.getLogger(SignalStatusController.class);
 
 
     @Autowired
@@ -53,7 +53,24 @@ public class SignalStatusController {
                                          @RequestParam(value = "deviceId", required = false) String deviceId,
                                          @RequestParam(value = "currentPage", required = false) Integer currentPage,
                                          @RequestParam(value = "pageSize", required = false) Integer pageSize) {
-        return signalStatusService.getPullSignalStatusByDate(date, deviceId, currentPage, pageSize);
+        return signalStatusService.getPullSignalStatusCopyByDate(date, deviceId, currentPage, pageSize);
+    }
+
+    @GetMapping("/getStatisticsDate")
+    public List<Map> getStatisticsDate(
+            @RequestParam(value = "date") Date date,
+            @RequestParam(value = "deviceId") String deviceId,
+            @RequestParam(value = "eventId") String eventId) {
+        List<Map> maps=signalStatusService.getStatisticsDate(date,deviceId,eventId);
+        logger.info("signalStatus getStatisticsDate date:"+date+"deviceId: "+deviceId+"eventId: "+eventId);
+        return maps;
+    }
+
+    @GetMapping("/getJobIdOnly")
+    public List<Map> getJobIdOnly(
+            @RequestParam(value = "date") Date date,
+            @RequestParam(value = "deviceId") String deviceId) {
+        return signalStatusService.getJobIdOnly(date,deviceId);
     }
 
 

@@ -583,6 +583,7 @@ public class DeviceActionSubscriptionServiceImpl implements DeviceActionSubscrip
 
                 if(jobPhase.get("StartTime")!=null){
                     time=DateUtils.strToDateStr(jobPhase.get("StartTime").toString());
+                    log.info("JobPhase StartTime:"+time);
                 }
 
                 //加密
@@ -791,7 +792,7 @@ public class DeviceActionSubscriptionServiceImpl implements DeviceActionSubscrip
                 //非加密
                 JobSignalStatusDeviceEventNew eventNew = new JobSignalStatusDeviceEventNew();
                 eventNew.setId(id);
-                eventNew.setEventId(str);
+                eventNew.setEventId(AssignUtils.formatValue(str));
                 eventNew.setSignaStatusDeviceId(jobSignalStatusDeviceId);
                 eventNew.setEventValue(eventValue);
                 eventNew.setInsertDateMonth(insertDateMonth);

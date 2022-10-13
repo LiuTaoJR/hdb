@@ -8,6 +8,7 @@ import com.xq.hdb.mapper.db3.*;
 import com.xq.hdb.service.DataBaseDecryptService;
 import com.xq.hdb.utils.AssignUtils;
 import com.xq.hdb.utils.DateUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,6 +16,7 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+@Slf4j
 @Service
 public class DataBaseDecryptServiceImpl implements DataBaseDecryptService {
 
@@ -65,11 +67,14 @@ public class DataBaseDecryptServiceImpl implements DataBaseDecryptService {
     @Autowired
     private JobSignalStatusHeaderNewMapper headerNewMapper;
 
+    @Autowired
+    private JobSignalStatusDeviceEventCopyMapper eventCopyMapper;
+
     ExecutorService pool = Executors.newFixedThreadPool(40);
 
     @Override
     public void decrypt() {
-        this.job_signal_status_header();
+        this.update_event_id();
     }
 
     public void job_signal_status_device(){
@@ -97,18 +102,17 @@ public class DataBaseDecryptServiceImpl implements DataBaseDecryptService {
     }
 
     public void job_signal_status_device_event(){
-        Integer totalCount = eventOldMapper.selectList(new QueryWrapper<>()).size();
+        Integer totalCount = eventCopyMapper.selectList(new QueryWrapper<>()).size();
         final int pageCount = totalCount % pageSize == 0 ? totalCount/pageSize : totalCount/pageSize +1;
         for (int i=1;i<= pageCount;i++){
             Integer page=new Integer(i);
             pool.submit(() -> {
-                List<JobSignalStatusDeviceEvent> oldList=eventOldMapper.pageList(10000*(page-1),10000);
+                List<JobSignalStatusDeviceEventCopy> oldList=eventCopyMapper.pageList(10000*(page-1),10000);
                 System.out.println(oldList.size()+"++++"+page+"+++++"+pageSize);
                 JobSignalStatusDeviceEventNew eventNew=new JobSignalStatusDeviceEventNew();
-                for(JobSignalStatusDeviceEvent old:oldList){
+                for(JobSignalStatusDeviceEventCopy old:oldList){
                     BeanUtils.copyProperties(old,eventNew);
-                    eventNew.setEventId(AssignUtils.decryptionToStr(old.getEventId()));
-                    eventNew.setEventValue(AssignUtils.decryptionToStr(old.getEventValue()));
+                    eventNew.setEventId(AssignUtils.formatValue(old.getEventId()));
                     eventNewMapper.insert(eventNew);
                 }
                 System.out.println("+++++++++++"+page+"+++++++++++++++++");
@@ -238,6 +242,25 @@ public class DataBaseDecryptServiceImpl implements DataBaseDecryptService {
                     headerNewMapper.insert(eventNew);
                 }
                 System.out.println("+++++++++++"+page+"+++++++++++++++++");
+            });
+        }
+    }
+
+    public void update_event_id(){
+        Integer totalCount = eventNewMapper.selectList(new QueryWrapper<>()).size();
+        final int pageCount = totalCount % pageSize == 0 ? totalCount/pageSize : totalCount/pageSize +1;
+        for (int i=1;i<= pageCount;i++){
+            Integer page=new Integer(i);
+            pool.submit(() -> {
+                List<JobSignalStatusDeviceEventNew> oldList=eventNewMapper.pageList(10000*(page-1),10000);
+                for(JobSignalStatusDeviceEventNew old:oldList){
+                  if(old.getEventId().length()!=6){
+                      //更新
+                      old.setEventId(AssignUtils.formatValue(old.getEventId()));
+                      eventNewMapper.updateById(old);
+                  }
+                }
+                log.info("eventId规则转码完成");
             });
         }
     }

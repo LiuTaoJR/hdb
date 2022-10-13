@@ -98,6 +98,14 @@ class HdbApplicationTests {
 
     }
 
+    @Test
+    public void cc() throws ParseException {
+        String date="2022-08-06 21:53:35";
+        System.out.println(date);
+        SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
+        System.out.println(sdf.parse(date));
+    }
+
 
 
 

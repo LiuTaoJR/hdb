@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xq.hdb.mapper.db3.JobSignalStatusNewMapper">
+
+
+
+    <!--根据日期获取数据总数-->
+    <select id="getSignalStatusCountByDate" resultType="java.lang.Integer">
+        select count(DISTINCT jss.id) from job_signal_status jss
+        left join job_signal_status_header jssh on jss.id = jssh.signalStatusId
+        <where>
+            <if test="deviceId != null  and deviceId != ''">
+                and jssh.device_id = #{deviceId}
+            </if>
+            <if test="startDate != null  and endDate != null  ">
+                and jss.create_time between #{startDate} and #{endDate}
+            </if>
+        </where>
+    </select>
+
+    <!--根据日期获取(分页获取)-->
+    <select id="pagingGetSignalStatusByDate" resultType="java.util.Map">
+        select distinct jss.id from job_signal_status jss
+        left join job_signal_status_header jssh on jss.id = jssh.signalStatusId
+
+        <where>
+            <if test="deviceId != null  and deviceId != ''">
+                and jssh.device_id = #{deviceId}
+            </if>
+            <if test="startDate != null  and endDate != null ">
+                and jss.create_time between #{startDate} and #{endDate}
+            </if>
+        </where>
+
+        order by jss.create_time desc
+        limit #{startIndex}, #{pageSize}
+    </select>
+
+    <!--根据日期获取(分页获取)-->
+    <select id="getJobIdOnly" resultType="java.util.Map">
+        SELECT jssdp.job_id as jobId FROM job_signal_status_device_phase jssdp
+                                     left join job_signal_status_device jssd on jssdp.signalStatusDeviceId=jssd.id
+                                     left join job_signal_status jss on jssd.signalStatusId=jss.id
+                                     left join job_signal_status_header jssh on jss.id=jssh.signalStatusId
+        <where>
+            <if test="deviceId != null  and deviceId != ''">
+                and jssh.device_id = #{deviceId}
+            </if>
+            <if test="startDate != null  and endDate != null ">
+                and jss.create_time between #{startDate} and #{endDate}
+            </if>
+        </where>
+        GROUP BY jssdp.job_id
+        order by jss.create_time desc
+    </select>
+
+
+
+
+
+</mapper>

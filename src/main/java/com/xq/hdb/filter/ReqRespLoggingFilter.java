@@ -34,10 +34,16 @@ public class ReqRespLoggingFilter implements Filter, Ordered {
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+        //转换
+        HttpServletRequest req = (HttpServletRequest)request;
+        HttpServletResponse resp = (HttpServletResponse)response;
+        req.setCharacterEncoding("utf-8");
+        resp.setContentType("text/html;charset=utf-8");
+
         if (log.isInfoEnabled()) {
 
-            RequestWrapper requestWrapper = new RequestWrapper((HttpServletRequest)request);
-            ResponseWrapper responseWrapper = new ResponseWrapper((HttpServletResponse)response);
+            RequestWrapper requestWrapper = new RequestWrapper(req);
+            ResponseWrapper responseWrapper = new ResponseWrapper(resp);
             boolean isFilter = isFilter(requestWrapper.getRequestUri());
             if(isOpenLog && isFilter){
                 this.logRequest(requestWrapper);
@@ -48,7 +54,7 @@ public class ReqRespLoggingFilter implements Filter, Ordered {
             }
 
         } else {
-            chain.doFilter(request, response);
+            chain.doFilter(req, resp);
         }
 
     }

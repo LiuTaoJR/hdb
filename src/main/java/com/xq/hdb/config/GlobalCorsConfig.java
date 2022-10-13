@@ -1,37 +1,20 @@
 package com.xq.hdb.config;
 
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import org.springframework.web.filter.CorsFilter;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
-public class GlobalCorsConfig {
-    @Bean
-    public CorsFilter corsFilter() {
-        //1.添加CORS配置信息
-        CorsConfiguration config = new CorsConfiguration();
-        //1) 允许的域,不要写*，否则cookie就无法使用了
-        config.addAllowedOrigin("*");
-        //2) 是否发送Cookie信息
-        config.setAllowCredentials(true);
-        //3) 允许的请求方式
-        config.addAllowedMethod("OPTIONS");
-        config.addAllowedMethod("HEAD");
-        config.addAllowedMethod("GET");
-        config.addAllowedMethod("PUT");
-        config.addAllowedMethod("POST");
-        config.addAllowedMethod("DELETE");
-        config.addAllowedMethod("PATCH");
-        // 4）允许的头信息
-        config.addAllowedHeader("*");
+public class GlobalCorsConfig implements WebMvcConfigurer {
+    static final String ORIGINS[] = new String[]{"GET", "POST", "PUT", "DELETE","OPTIONS"};
 
-        //2.添加映射路径，我们拦截一切请求
-        UrlBasedCorsConfigurationSource configSource = new UrlBasedCorsConfigurationSource();
-        configSource.registerCorsConfiguration("/**", config);
-
-        //3.返回新的CorsFilter.
-        return new CorsFilter(configSource);
+    @Override
+    public void addCorsMappings(CorsRegistry registry) {
+        registry.addMapping("/**") // 所有的当前站点的请求地址，都支持跨域访问。
+                .allowedOriginPatterns("*") // 所有的外部域都可跨域访问。 如果是localhost则很难配置，因为在跨域请求的时候，外部域的解析可能是localhost、127.0.0.1、主机名
+                .allowCredentials(true) // 是否支持跨域用户凭证
+                .allowedMethods(ORIGINS) // 当前站点支持的跨域请求类型是什么
+                .maxAge(3600); // 超时时长设置为1小时。 时间单位是秒。
     }
+
 }

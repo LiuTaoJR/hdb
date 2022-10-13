@@ -5,6 +5,7 @@ import com.xq.hdb.entity.JobSignalStatusDevice;
 import com.xq.hdb.entity.JobSignalStatusDeviceEvent;
 import com.xq.hdb.entity.JobSignalStatusDevicePhase;
 import com.xq.hdb.mapper.db1.*;
+import com.xq.hdb.mapper.db3.*;
 import com.xq.hdb.service.SignalStatusService;
 import com.xq.hdb.utils.AssignUtils;
 import com.xq.hdb.utils.DateUtils;
@@ -38,6 +39,23 @@ public class SignalStatusServiceImpl implements SignalStatusService {
 
     @Autowired
     private JobSignalStatusDevicePhaseMapper jobSignalStatusDevicePhaseMapper;
+
+    @Autowired
+    private JobSignalStatusNewMapper jobSignalStatusNewMapper;
+
+    @Autowired
+    private JobSignalStatusHeaderNewMapper jobSignalStatusHeaderNewMapper;
+
+    @Autowired
+    private JobSignalStatusDeviceNewMapper jobSignalStatusDeviceNewMapper;
+
+    @Autowired
+    private JobSignalStatusDeviceEventNewMapper jobSignalStatusDeviceEventNewMapper;
+
+    @Autowired
+    private JobSignalStatusDevicePhaseNewMapper jobSignalStatusDevicePhaseNewMapper;
+
+
 
 
 
@@ -222,7 +240,100 @@ public class SignalStatusServiceImpl implements SignalStatusService {
         return result;
     }
 
+    @Override
+    public Map getPullSignalStatusCopyByDate(Date date, String deviceId, Integer currentPage, Integer pageSize) {
+        Map result = new HashMap();
 
+        //当前页默认第一页
+        //每页显示数量
+        if(currentPage == null || currentPage < 1){
+            currentPage = 1;
+        }
+
+        //每页显示数量
+        if(pageSize == null || pageSize < 1){
+            pageSize = 10;
+        }
+        //获取总记录数
+        int recordCount = jobSignalStatusNewMapper.getSignalStatusCountByDate(DateUtils.getDayStart(date), DateUtils.getDayEnd(date), deviceId);
+
+        //总页数
+        Integer pageCount;
+        if(recordCount % pageSize == 0){
+            pageCount = recordCount / pageSize;
+        }else{
+            pageCount = recordCount / pageSize + 1;
+        }
+
+        int startIndex = (currentPage-1) * pageSize;
+
+        List<Map> signalStatusStrList = jobSignalStatusNewMapper.pagingGetSignalStatusByDate(DateUtils.getDayStart(date), DateUtils.getDayEnd(date), deviceId, startIndex, pageSize);
+
+        //注：下面数据没有用sql查一条而是查出合集，是为了以后扩展性；
+
+        if(signalStatusStrList != null && signalStatusStrList.size() > 0){
+            List resultList = new ArrayList();
+            for(Map signalStatusMap : signalStatusStrList){
+
+                String signalStatusId = signalStatusMap.get("id").toString();
+
+                //deviceId
+                List<Map> headerList = jobSignalStatusHeaderNewMapper.getHeaderBySignalStatusId(signalStatusId);
+                if(headerList != null && headerList.size() > 0){
+                    Map map = new HashMap();
+                    map.put("id",signalStatusId);
+                    map.put("deviceId",headerList.get(0).get("device_id"));
+
+                    //根据signalStatusId与deviceId获取header里时间
+                    String deviceId1 = headerList.get(0).get("device_id").toString();
+                    Date time = jobSignalStatusHeaderNewMapper.getTimeByStatusIdAndDeviceId(signalStatusId, deviceId1);
+                    map.put("time",time);
+                    Date createTime = jobSignalStatusHeaderNewMapper.getCreateTimeByStatusIdAndDeviceId(signalStatusId, deviceId1);
+                    map.put("createTime",createTime);
+
+                    //Speed
+                    List<Map> deviceInfoList = jobSignalStatusDeviceNewMapper.getDeviceSpeedBySignalStatusId(signalStatusId);
+                    if(deviceInfoList != null && deviceInfoList.size() > 0){
+                        map.put("Speed",String.valueOf(deviceInfoList.get(0).get("speed")));
+
+                        //Event
+                        List<Map> eventList = jobSignalStatusDeviceEventNewMapper.getDeviceEventBySignalStatusId(deviceInfoList.get(0).get("id").toString());
+                        if(eventList != null && eventList.size() > 0){
+                            map.put("EventID",eventList.get(0).get("event_id"));
+                        }
+
+                        //JobID与Status
+                        List<Map> jobPhaseList = jobSignalStatusDevicePhaseNewMapper.getJobPhaseByDeviceInfoId(deviceInfoList.get(0).get("id").toString());
+                        if(jobPhaseList != null && jobPhaseList.size() > 0){
+                            map.put("Status",jobPhaseList.get(0).get("status"));
+                            map.put("JobID",jobPhaseList.get(0).get("job_id"));
+                        }
+                    }
+                    resultList.add(map);
+                }
+
+            }
+
+            result.put("currentPage", currentPage);
+            result.put("pageSize", pageSize);
+            result.put("pageCount", pageCount);
+            result.put("recordCount", recordCount);
+            result.put("SignalStatus", resultList);
+
+        }
+
+        return result;
+    }
+
+    @Override
+    public List<Map> getStatisticsDate(Date date, String deviceId, String eventId) {
+        return jobSignalStatusHeaderNewMapper.getStatisticsDate(DateUtils.getDayStart(date), DateUtils.getDayEnd(date), deviceId,eventId);
+    }
+
+    @Override
+    public List<Map> getJobIdOnly(Date date, String deviceId) {
+        return jobSignalStatusNewMapper.getJobIdOnly(DateUtils.getDayStart(date), DateUtils.getDayEnd(date), deviceId);
+    }
 
 
 }

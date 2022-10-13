@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.*;
 
 @RestController
-@RequestMapping("/pyx/api/code")
+@RequestMapping("/code")
 public class MachineController {
 
     @Autowired

@@ -56,9 +56,6 @@ public class SchedulerTask {
     public synchronized void pullJob() throws InterruptedException {
         log.info("SchedulerTask pullJob start：");
         jobService.pullJob();
-
-
-
     }
 
 
