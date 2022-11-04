@@ -10,13 +10,11 @@ import com.xq.hdb.service.SignalStatusService;
 import com.xq.hdb.utils.AssignUtils;
 import com.xq.hdb.utils.DateUtils;
 import com.xq.hdb.utils.StringUtils;
-import com.xq.hdb.vo.SignalStatusDeviceEventVO;
-import com.xq.hdb.vo.SignalStatusDeviceInfoVO;
-import com.xq.hdb.vo.SignalStatusDevicePhaseVO;
-import com.xq.hdb.vo.SignalStatusVO;
+import com.xq.hdb.vo.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.w3c.dom.ls.LSInput;
 
 import java.util.*;
 
@@ -331,9 +329,322 @@ public class SignalStatusServiceImpl implements SignalStatusService {
     }
 
     @Override
-    public List<Map> getJobIdOnly(Date date, String deviceId) {
-        return jobSignalStatusNewMapper.getJobIdOnly(DateUtils.getDayStart(date), DateUtils.getDayEnd(date), deviceId);
+    public List<Map> getJobIdOnly(Date date) {
+        return jobSignalStatusNewMapper.getJobIdOnly(DateUtils.getDayStart(date), DateUtils.getDayEnd(date));
     }
 
+    @Override
+    public List<DeviceDataVO> getJobSignalStatus(Date date, String deviceId) {
+        List<DeviceDataVO> maps=jobSignalStatusNewMapper.getJobSignalStatus(DateUtils.getDayStart(date), DateUtils.getDayEnd(date),deviceId);
+        log.info("JobSignalStatus 返回数据："+maps);
+        return maps;
+    }
+
+    //成品 Good Waste
+    @Override
+    public List<Map> getProductGood(Date date, String deviceId) {
+        List<DeviceDataVO> maps=jobSignalStatusNewMapper.getJobSignalStatus(DateUtils.getDayStart(date), DateUtils.getDayEnd(date),deviceId);
+        List<Map> result=new ArrayList<>();
+        Map<String,Object> map=new HashMap<>();
+        Map<String,Object> map2=new HashMap<>();
+        Map<String,Object> map3=new HashMap<>();
+        String jobid = null;
+        boolean flag=true;
+        for(DeviceDataVO endProduct:maps){
+            if(flag && endProduct.getStatusDetails().equals("Good")){
+                flag=false;
+                jobid=endProduct.getJobId();
+                map.put(jobid,endProduct.getProductionCounter());
+            }
+
+            if(!flag && endProduct.getStatusDetails().equals("Waste")){
+                flag=true;
+                if(endProduct.getJobId().equals(jobid)){
+                    int a=Integer.valueOf(map.get(jobid).toString());
+                    int b=Integer.valueOf(endProduct.getProductionCounter());
+                    int c;
+                    if(map2.get(jobid)==null){
+                        c=b-a;
+                    }else{
+                        c=Integer.valueOf(map2.get(jobid).toString())+(b-a);
+                    }
+                    map.put(jobid,c);
+                    map2.put(jobid,c);
+                    map3.put(jobid,c);
+                }
+            }
+        }
+        result.add(map3);
+        return result;
+    }
+
+    //生产废张 Waste Idling
+    @Override
+    public List<Map> getProductWaste(Date date, String deviceId) {
+        List<DeviceDataVO> maps=jobSignalStatusNewMapper.getProductWaste(DateUtils.getDayStart(date), DateUtils.getDayEnd(date),deviceId,"合格品产量");
+        return this.getDeviceInfoData(maps,"Waste","Idling");
+    }
+
+    //过版纸 Waste Idling
+    @Override
+    public List<Map> getPassPaper(Date date, String deviceId) {
+        List<DeviceDataVO> maps=jobSignalStatusNewMapper.getProductWaste(DateUtils.getDayStart(date), DateUtils.getDayEnd(date),deviceId,"基本准备");
+        return this.getDeviceInfoData(maps,"Waste","Idling");
+    }
+
+    @Override
+    public List<Map> getPrintTime(Date date, String deviceId) {
+        List<DeviceDataVO> maps=jobSignalStatusNewMapper.getJobSignalStatus(DateUtils.getDayStart(date), DateUtils.getDayEnd(date),deviceId);
+        List<Map> result=new ArrayList<>();
+        Map<String,Object> map=new HashMap<>();
+        Map<String,Object> map2=new HashMap<>();
+        Map<String,Object> map3=new HashMap<>();
+        String jobid = null;
+        boolean flag=true;
+        for(DeviceDataVO endProduct:maps){
+            if(flag && endProduct.getStatusDetails().equals("Good")){
+                flag=false;
+                jobid=endProduct.getJobId();
+                map.put(jobid,endProduct.getTime());
+            }
+
+            if(!flag && endProduct.getStatusDetails().equals("Waste")){
+                flag=true;
+                if(endProduct.getJobId().equals(jobid)){
+                    Date a=(Date) map.get(jobid);
+                    Date b=endProduct.getTime();
+                    int c;
+                    if(map2.get(jobid)==null){
+                        c= (int) ((b.getTime() - a.getTime()) / (1000));
+                    }else{
+                        int d=(int) ((b.getTime() - a.getTime()) / (1000));
+                        c=Integer.valueOf(map2.get(jobid).toString())+d;
+                    }
+                    map.put(jobid,c);
+                    map2.put(jobid,c);
+                    map3.put(jobid,c);
+                }
+            }
+        }
+        result.add(map3);
+        return result;
+    }
+
+    @Override
+    public DeviceDataResultVO getDeviceDataResult(Date date, String deviceId) {
+        DeviceDataResultVO vo=new DeviceDataResultVO();
+        List<Map> productGoods=this.getProductGood(date,deviceId);
+        List<Map> productWastes=this.getProductWaste(date,deviceId);
+        List<Map> passPapers=this.getPassPaper(date,deviceId);
+        List<Map> printTimes=this.getPrintTime(date,deviceId);
+        vo.setProductGoodList(productGoods);
+        vo.setProductWasteList(productWastes);
+        vo.setPassPaperList(passPapers);
+        vo.setPrintTimeList(printTimes);
+        return vo;
+    }
+
+    @Override
+    public Map<String,Object> aa(Date date, String deviceId) {
+        List<Map> groupDevice=jobSignalStatusNewMapper.getGroupDeviceJobId(DateUtils.getDayStart(date), DateUtils.getDayEnd(date),deviceId);
+        Map<String,Object> result=new HashMap<>();
+        if(groupDevice.size()>0){
+            for(Map Device:groupDevice){
+                 Map<String,Object> detailMap=new HashMap<>();
+                 String jobId=Device.get("jobid").toString();
+                 //查询成品数量
+                 List<DeviceDataVO> goodList=jobSignalStatusNewMapper.getDeviceByJobId(DateUtils.getDayStart(date), DateUtils.getDayEnd(date),deviceId,jobId,null);
+                 Map goodMap=this.getGood(goodList,"Good","Waste");
+                 if(goodMap.keySet().size()>0){
+                     for (Object key : goodMap.keySet()) {
+                         detailMap.put("Good",goodMap.get(key));
+                     }
+                 }else{
+                     detailMap.put("Good",0);
+                 }
+
+
+                 //查询生产废张
+                List<DeviceDataVO> productWasteList=jobSignalStatusNewMapper.getDeviceByJobId(DateUtils.getDayStart(date), DateUtils.getDayEnd(date),deviceId,jobId,"合格品产量");
+                Map productWasteMap=this.getWaste(productWasteList,"Waste","Idling");
+                if(productWasteMap.keySet().size()>0){
+                    for (Object key : productWasteMap.keySet()) {
+                        detailMap.put("WasteInProduction",productWasteMap.get(key));
+                    }
+                }else{
+                    detailMap.put("WasteInProduction",0);
+                }
+
+
+                //查询过版纸
+                List<DeviceDataVO> passWasteList=jobSignalStatusNewMapper.getDeviceByJobId(DateUtils.getDayStart(date), DateUtils.getDayEnd(date),deviceId,jobId,"基本准备");
+                Map passWasteMap=this.getWaste(passWasteList,"Waste","Idling");
+                if(passWasteMap.keySet().size()>0){
+                    for (Object key : passWasteMap.keySet()) {
+                        detailMap.put("WasteInMakeready",passWasteMap.get(key));
+                    }
+                }else{
+                    detailMap.put("WasteInMakeready",0);
+                }
+
+
+                //查询成品印刷时间
+                List<DeviceDataVO> goodTimeList=jobSignalStatusNewMapper.getDeviceByJobId(DateUtils.getDayStart(date), DateUtils.getDayEnd(date),deviceId,jobId,null);
+                Map goodTimeMap=this.getProductGoodTime(goodTimeList,"Good","Waste");
+                if(goodTimeMap.keySet().size()>0){
+                    for (Object key : goodTimeMap.keySet()) {
+                        detailMap.put("ProductionGoodTime",goodTimeMap.get(key));
+                    }
+                }else{
+                    detailMap.put("ProductionGoodTime",0);
+                }
+
+
+                result.put(jobId,detailMap);
+            }
+        }
+
+        return result;
+    }
+
+    //过滤相关设备数据
+    public List<Map> getDeviceInfoData(List<DeviceDataVO> voList, String startStr, String endStr){
+        List<Map> result=new ArrayList<>();
+        Map<String,Object> map=new HashMap<>();
+        Map<String,Object> map2=new HashMap<>();
+        Map<String,Object> map3=new HashMap<>();
+        String jobid = null;
+        boolean flag=true;
+        for(DeviceDataVO endProduct:voList){
+            if(flag && endProduct.getStatusDetails().equals(startStr)){
+                flag=false;
+                jobid=endProduct.getJobId();
+                map.put(jobid,endProduct.getTotalProductionCounter());
+            }
+
+            if(!flag && endProduct.getStatusDetails().equals(endStr)){
+                flag=true;
+                if(endProduct.getJobId().equals(jobid)){
+                    int a=Integer.valueOf(map.get(jobid).toString());
+                    int b=Integer.valueOf(endProduct.getTotalProductionCounter());
+                    int c;
+                    if(map2.get(jobid)==null){
+                        c=b-a;
+                    }else{
+                        c=Integer.valueOf(map2.get(jobid).toString())+(b-a);
+                    }
+                    map.put(jobid,c);
+                    map2.put(jobid,c);
+                    map3.put(jobid,c);
+                }
+            }
+        }
+        result.add(map3);
+        return result;
+    }
+
+    //过滤成品
+    public Map getGood(List<DeviceDataVO> voList, String startStr, String endStr){
+        Map<String,Object> map=new HashMap<>();
+        Map<String,Object> map2=new HashMap<>();
+        Map<String,Object> map3=new HashMap<>();
+        String jobid = null;
+        boolean flag=true;
+        for(DeviceDataVO endProduct:voList){
+            if(flag && endProduct.getStatusDetails().equals(startStr)){
+                flag=false;
+                jobid=endProduct.getJobId();
+                map.put(jobid,endProduct.getProductionCounter());
+            }
+
+            if(!flag && endProduct.getStatusDetails().equals(endStr)){
+                flag=true;
+                if(endProduct.getJobId().equals(jobid)){
+                    int a=Integer.valueOf(map.get(jobid).toString());
+                    int b=Integer.valueOf(endProduct.getProductionCounter());
+                    int c;
+                    if(map2.get(jobid)==null){
+                        c=b-a;
+                    }else{
+                        c=Integer.valueOf(map2.get(jobid).toString())+(b-a);
+                    }
+                    map.put(jobid,c);
+                    map2.put(jobid,c);
+                    map3.put(jobid,c);
+                }
+            }
+        }
+        return map3;
+    }
+
+
+    //过滤废张
+    public Map getWaste(List<DeviceDataVO> voList, String startStr, String endStr){
+        Map<String,Object> map=new HashMap<>();
+        Map<String,Object> map2=new HashMap<>();
+        Map<String,Object> map3=new HashMap<>();
+        String jobid = null;
+        boolean flag=true;
+        for(DeviceDataVO endProduct:voList){
+            if(flag && endProduct.getStatusDetails().equals(startStr)){
+                flag=false;
+                jobid=endProduct.getJobId();
+                map.put(jobid,endProduct.getTotalProductionCounter());
+            }
+
+            if(!flag && endProduct.getStatusDetails().equals(endStr)){
+                flag=true;
+                if(endProduct.getJobId().equals(jobid)){
+                    int a=Integer.valueOf(map.get(jobid).toString());
+                    int b=Integer.valueOf(endProduct.getTotalProductionCounter());
+                    int c;
+                    if(map2.get(jobid)==null){
+                        c=b-a;
+                    }else{
+                        c=Integer.valueOf(map2.get(jobid).toString())+(b-a);
+                    }
+                    map.put(jobid,c);
+                    map2.put(jobid,c);
+                    map3.put(jobid,c);
+                }
+            }
+        }
+        return map3;
+    }
+
+    //成品印刷时间
+    public Map getProductGoodTime(List<DeviceDataVO> voList, String startStr, String endStr){
+        Map<String,Object> map=new HashMap<>();
+        Map<String,Object> map2=new HashMap<>();
+        Map<String,Object> map3=new HashMap<>();
+        String jobid = null;
+        boolean flag=true;
+        for(DeviceDataVO endProduct:voList){
+            if(flag && endProduct.getStatusDetails().equals(startStr)){
+                flag=false;
+                jobid=endProduct.getJobId();
+                map.put(jobid,endProduct.getTime());
+            }
+
+            if(!flag && endProduct.getStatusDetails().equals(endStr)){
+                flag=true;
+                if(endProduct.getJobId().equals(jobid)){
+                    Date a=(Date) map.get(jobid);
+                    Date b=endProduct.getTime();
+                    int c;
+                    if(map2.get(jobid)==null){
+                        c= (int) ((b.getTime() - a.getTime()) / (1000));
+                    }else{
+                        int d=(int) ((b.getTime() - a.getTime()) / (1000));
+                        c=Integer.valueOf(map2.get(jobid).toString())+d;
+                    }
+                    map.put(jobid,c);
+                    map2.put(jobid,c);
+                    map3.put(jobid,c);
+                }
+            }
+        }
+        return map3;
+    }
 
 }

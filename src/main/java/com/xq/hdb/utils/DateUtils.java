@@ -401,7 +401,7 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils
     public static String strToDateStr(String time) {
         String str="";
         try {
-            SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
             SimpleDateFormat sd=new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSX");
             Date date=sd.parse(time);
             str=sdf.format(date);

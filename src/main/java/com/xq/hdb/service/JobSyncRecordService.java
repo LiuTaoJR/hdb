@@ -16,5 +16,8 @@ public interface JobSyncRecordService extends IService<JobSyncRecord> {
 
      void updateJobId(String jobId);
 
+     void updateJobIdNew(String jobId,String time);
+
+
 
 }

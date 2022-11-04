@@ -29,7 +29,11 @@ public class ReceiveSubscriptionController {
     public String dealSignal(@RequestBody String jsonStr){
         try {
             String json = AssignUtils.toUtf8String(jsonStr);
-            log.info("DeviceActionSubscriptionController json start:"+json);
+            if(json.contains("SignalNotification")){
+                log.info("3.1.15接收订阅信息 JsonStr start:"+json);
+            }else{
+                log.info("3.2.5接收订阅信息 JsonStr start:"+json);
+            }
             return deviceActionSubscriptionService.dealSignal(json);
         }catch (Exception e){
             e.printStackTrace();

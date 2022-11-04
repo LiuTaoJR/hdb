@@ -142,6 +142,9 @@ public class DeviceActionSubscriptionServiceImpl implements DeviceActionSubscrip
     @Autowired
     private JobSignalStatusDeviceNewMapper jobSignalStatusDeviceNewMapper;
 
+    @Autowired
+    private JobSyncRecordNewMapper jobSyncRecordNewMapper;
+
 
 
 
@@ -204,10 +207,6 @@ public class DeviceActionSubscriptionServiceImpl implements DeviceActionSubscrip
     @Transactional(rollbackFor = Exception.class,propagation = Propagation.NESTED)
     public synchronized String dealSignal(String jsonStr) {
 
-
-
-        System.out.println("接收到3.2.5推送信息 ：" + jsonStr);
-
         //处理json字符串
         Gson gson = new Gson();
         Map<String, Map<String, List>> mapResult = gson.fromJson(jsonStr, new HashMap<String, Object>().getClass());
@@ -216,14 +215,19 @@ public class DeviceActionSubscriptionServiceImpl implements DeviceActionSubscrip
             List<Map> signalRessource = mapResult.get("XJMF").get("SignalRessource");
             if(signalRessource != null && signalRessource.size() > 0){
                 manageRessource(signalRessource);
-
             }
 
             List<Map> signalStatus = mapResult.get("XJMF").get("SignalStatus");
             if(signalStatus != null && signalStatus.size() > 0){
                 manageStatus(signalStatus);
-
             }
+
+            List<Map> signalNotification = mapResult.get("XJMF").get("SignalNotification");
+            if(signalNotification != null && signalNotification.size() > 0){
+                manageNotification(signalNotification);
+            }
+
+
         }catch (Exception e){
             e.printStackTrace();
             log.error("数据处理出现异常", e);
@@ -601,7 +605,7 @@ public class DeviceActionSubscriptionServiceImpl implements DeviceActionSubscrip
                 if(jobPhase.get("JobID") != null){
                     jobId = URLDecoder.decode(jobPhase.get("JobID").toString(),"utf-8");
                     log.info("JobPhase jodId明文:"+jobId);
-                    jobSyncRecordService.updateJobId(AssignUtils.encrypt(jobId));
+                    jobSyncRecordService.updateJobIdNew(jobId,time);
                     devicePhase.setJobId(AssignUtils.encrypt(jobId));
                 }else{
                     devicePhase.setJobId("");
@@ -800,6 +804,35 @@ public class DeviceActionSubscriptionServiceImpl implements DeviceActionSubscrip
             }
 
         }
+    }
+
+    @Transactional(rollbackFor = Exception.class,propagation = Propagation.NESTED)
+    @Log(title = "manageNotification", businessType = BusinessType.INSERT)
+    public void manageNotification(List<Map> signalNotificationList) throws Exception {
+           if(signalNotificationList!=null && signalNotificationList.size()>0){
+               for(Map signalNotification:signalNotificationList){
+                   //Notification
+                   List<Map> NotificationList = (ArrayList)signalNotification.get("Notification");
+                   if(NotificationList.size()>0){
+                      for(Map notification:NotificationList){
+                          //获取job_id并插入到job_sync_record表中
+                          if(notification.get("JobID")!=null){
+                              int insertDateMonth = Integer.valueOf(DateUtils.currentYearMonth());
+                              JobSyncRecordNew recordNew=new JobSyncRecordNew();
+                              recordNew.setId(AssignUtils.getUUid());
+                              recordNew.setJobId(URLDecoder.decode(notification.get("JobID").toString(),"utf-8"));
+                              recordNew.setSyncStatusJob("N");
+                              recordNew.setSyncStatusWorkstep("N");
+                              recordNew.setCreateTime(new Date());
+                              recordNew.setUpdateTime(new Date());
+                              recordNew.setInsertDateMonth(insertDateMonth);
+                              jobSyncRecordNewMapper.insert(recordNew);
+                          }
+                      }
+
+                   }
+               }
+           }
     }
 
 

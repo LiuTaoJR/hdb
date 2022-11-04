@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xq.hdb.mapper.db4.JobWorkstepNewMapper">
+
+
+    <select id="isExists" parameterType="java.lang.String" resultType="java.lang.Integer">
+        select count(id) from job_workstep where id= #{workstepId}
+    </select>
+
+    <!--根据jobId获取-->
+    <select id="getPullWorkstepByJobId" resultType="java.util.Map">
+        select job_id, status, device_id, amount_planned, waste_planned, amount_produced, waste_produced, device_id, start, end, DATE_FORMAT(create_time,'%Y-%m-%d %H:%i:%s') as createTime from job_workstep
+        where
+            job_id = #{jobId}
+        order by create_time desc
+    </select>
+
+
+
+</mapper>

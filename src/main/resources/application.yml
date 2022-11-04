@@ -1,6 +1,6 @@
 # 项目相关配置
 server:
-  port: 10001
+  port: 10004
   tomcat:
     uri-encoding: UTF-8
     max-threads: 800
@@ -20,6 +20,8 @@ spring:
       enabled: true
   mvc:
     static-path-pattern: /**
+    pathmatch:
+      matching-strategy: ANT_PATH_MATCHER
   web:
     resources:
       static-locations: classpath:/META-INF/resources/,classpath:/resources/,classpath:/static/,classpath:/public/
@@ -36,27 +38,36 @@ spring:
   datasource:
     db1:
       driver-class-name: com.mysql.cj.jdbc.Driver
-      jdbc-url: jdbc:mysql://localhost:3306/prinectsignaldaata?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
+      jdbc-url: jdbc:mysql://localhost:3306/prinectsignaldaata?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=GMT%2B8&nuLlCatalogMeansCurrent=true
       username: root
-      password: root
+      password: pyxMysql!
       hikari:
         maximum-pool-size: 50
 
     db2:
       driver-class-name:  com.mysql.cj.jdbc.Driver
-      jdbc-url: jdbc:mysql://localhost:3306/prinectjobdata?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
+      jdbc-url: jdbc:mysql://localhost:3306/prinectjobdata?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=GMT%2B8&nuLlCatalogMeansCurrent=true
       username: root
-      password: root
+      password: pyxMysql!
       hikari:
         maximum-pool-size: 50
 
     db3:
       driver-class-name: com.mysql.cj.jdbc.Driver
-      jdbc-url: jdbc:mysql://localhost:3306/prinectsignaldaata_copy_prod?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
+      jdbc-url: jdbc:mysql://localhost:3306/prinectsignaldaata_copy?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=GMT%2B8&nuLlCatalogMeansCurrent=true
       username: root
-      password: root
+      password: pyxMysql!
       hikari:
         maximum-pool-size: 50
+
+    db4:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      jdbc-url: jdbc:mysql://localhost:3306/prinectjobdata_copy?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=GMT%2B8&nuLlCatalogMeansCurrent=true
+      username: root
+      password: pyxMysql!
+      hikari:
+        maximum-pool-size: 50
+
 
 
 hdb:
@@ -75,7 +86,7 @@ hdb:
   #加解密盐  注意*此盐目前不生效，先写死在加解密类里
   salt: hdbsaltabcdefg
   isOpenLog: true
-  notLogFilerPath: /index,/js/
+  notLogFilerPath: /index,/js/,/css/
 
 
 

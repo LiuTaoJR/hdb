@@ -99,6 +99,7 @@ public class DataBaseDecryptServiceImpl implements DataBaseDecryptService {
                 System.out.println("+++++++++++"+page+"+++++++++++++++++");
             });
         }
+        pool.shutdown();
     }
 
     public void job_signal_status_device_event(){
@@ -118,6 +119,7 @@ public class DataBaseDecryptServiceImpl implements DataBaseDecryptService {
                 System.out.println("+++++++++++"+page+"+++++++++++++++++");
             });
         }
+        pool.shutdown();
     }
 
     public void job_signal_status_device_phase(){
@@ -144,6 +146,7 @@ public class DataBaseDecryptServiceImpl implements DataBaseDecryptService {
                 System.out.println("+++++++++++"+page+"+++++++++++++++++");
             });
         }
+        pool.shutdown();
     }
 
     public void job_signal_status(){
@@ -164,6 +167,7 @@ public class DataBaseDecryptServiceImpl implements DataBaseDecryptService {
                 System.out.println("+++++++++++"+page+"+++++++++++++++++");
             });
         }
+        pool.shutdown();
     }
 
     public void job_signal_status_device_phase_activity(){
@@ -185,6 +189,7 @@ public class DataBaseDecryptServiceImpl implements DataBaseDecryptService {
                 System.out.println("+++++++++++"+page+"+++++++++++++++++");
             });
         }
+        pool.shutdown();
     }
 
     public void job_signal_status_device_phase_mis_details(){
@@ -204,6 +209,7 @@ public class DataBaseDecryptServiceImpl implements DataBaseDecryptService {
                 System.out.println("+++++++++++"+page+"+++++++++++++++++");
             });
         }
+        pool.shutdown();
     }
 
     public void job_signal_status_device_phase_part(){
@@ -223,6 +229,7 @@ public class DataBaseDecryptServiceImpl implements DataBaseDecryptService {
                 System.out.println("+++++++++++"+page+"+++++++++++++++++");
             });
         }
+        pool.shutdown();
     }
 
     public void job_signal_status_header(){
@@ -244,6 +251,7 @@ public class DataBaseDecryptServiceImpl implements DataBaseDecryptService {
                 System.out.println("+++++++++++"+page+"+++++++++++++++++");
             });
         }
+        pool.shutdown();
     }
 
     public void update_event_id(){
@@ -263,5 +271,6 @@ public class DataBaseDecryptServiceImpl implements DataBaseDecryptService {
                 log.info("eventId规则转码完成");
             });
         }
+        pool.shutdown();
     }
 }

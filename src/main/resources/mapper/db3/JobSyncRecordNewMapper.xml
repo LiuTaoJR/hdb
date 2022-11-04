@@ -9,5 +9,28 @@
         select count(id) from job_sync_record where job_id = #{jobId}
     </select>
 
+    <!--判断是否存在此id的数据-->
+    <select id="getjobIdBySyncStatusJob" parameterType="java.lang.String" resultType="java.lang.String">
+        select job_id from job_sync_record where sync_status_job = #{status}
+    </select>
+
+    <update id="upsateSyncStatusJob">
+        update job_sync_record set sync_status_job = #{status} where job_id = #{jobId}
+    </update>
+
+    <!--判断是否存在此id的数据-->
+    <select id="getjobIdBySyncStatusWorkstep" parameterType="java.lang.String" resultType="java.lang.String">
+        select job_id from job_sync_record where sync_status_workstep = #{status}
+    </select>
+
+    <update id="upsateSyncStatusWorkstep">
+        update job_sync_record set sync_status_workstep = #{status} where job_id = #{jobId}
+    </update>
+
+    <delete id="delByJobId">
+        delete from job_sync_record where job_id = #{jobId}
+    </delete>
+
+
 
 </mapper>

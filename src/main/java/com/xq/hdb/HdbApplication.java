@@ -9,7 +9,7 @@ import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
 import org.springframework.scheduling.annotation.EnableScheduling;
 
 
-//@EnableScheduling
+@EnableScheduling
 @SpringBootApplication(exclude = MybatisAutoConfiguration.class)
 @ServletComponentScan
 public class HdbApplication extends SpringBootServletInitializer {
