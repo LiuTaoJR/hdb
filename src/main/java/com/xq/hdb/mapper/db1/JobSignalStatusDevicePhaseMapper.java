@@ -16,12 +16,10 @@ import java.util.Map;
  * @date 2022-06-07
  */
 @Mapper
-public interface JobSignalStatusDevicePhaseMapper extends BaseMapper<JobSignalStatusDevicePhase>{
-
+public interface JobSignalStatusDevicePhaseMapper extends BaseMapper<JobSignalStatusDevicePhase> {
 
 
     List<JobSignalStatusDevicePhase> getDevicePhaseListByDeviceId(String statusDeviceId);
-
 
 
     List<Map> getJobPhaseByDeviceInfoId(String deviceId);

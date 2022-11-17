@@ -1,7 +1,6 @@
 package com.xq.hdb.mapper.db1;
 
 
-
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.xq.hdb.entity.JobSignalRes;
 import org.apache.ibatis.annotations.Mapper;
@@ -13,7 +12,6 @@ import org.apache.ibatis.annotations.Mapper;
  * @date 2022-06-07
  */
 @Mapper
-public interface JobSignalResMapper extends BaseMapper<JobSignalRes>
-{
+public interface JobSignalResMapper extends BaseMapper<JobSignalRes> {
 
 }

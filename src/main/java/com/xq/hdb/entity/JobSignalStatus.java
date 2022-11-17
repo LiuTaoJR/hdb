@@ -16,8 +16,7 @@ import java.util.Date;
  */
 @Data
 @TableName("job_signal_status")
-public class JobSignalStatus
-{
+public class JobSignalStatus {
     private static final long serialVersionUID = 1L;
 
 
@@ -44,10 +43,6 @@ public class JobSignalStatus
 
     @TableField("insert_date_month")
     private Integer insertDateMonth;
-
-
-
-
 
 
 }

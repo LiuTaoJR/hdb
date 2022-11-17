@@ -14,16 +14,17 @@ public class IndexController {
 
     /**
      * 打开首页
+     *
      * @return
      */
     @GetMapping("/index")
-    public String opendIndex(){
+    public String opendIndex() {
         log.info("这是index页面");
         return "index.html";
     }
 
     @GetMapping("/decryption")
-    public String openDecryption(){
+    public String openDecryption() {
         return "decryption.html";
     }
 

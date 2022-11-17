@@ -17,7 +17,7 @@ public interface JobSignalStatusHeaderNewMapper extends BaseMapper<JobSignalStat
     Date getCreateTimeByStatusIdAndDeviceId(@Param("signalStatusId") String signalStatusId, @Param("deviceId") String deviceId);
 
     //当日统计发生时间
-    List<Map> getStatisticsDate(@Param("startDate") Date startDate, @Param("endDate") Date endDate,@Param("deviceId") String deviceId,@Param("eventId") String eventId);
+    List<Map> getStatisticsDate(@Param("startDate") Date startDate, @Param("endDate") Date endDate, @Param("deviceId") String deviceId, @Param("eventId") String eventId);
 
 
 }

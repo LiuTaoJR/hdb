@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper
-PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.xq.hdb.mapper.db2.JobWorkstepMapper">
-
-
 
 
     <select id="isExists" parameterType="java.lang.String" resultType="java.lang.Integer">
@@ -12,15 +10,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </select>
 
 
-
-    <select id="getWorkstepList"  resultType="com.xq.hdb.entity.JobWorkstep">
+    <select id="getWorkstepList" resultType="com.xq.hdb.entity.JobWorkstep">
         select * from job_workstep
         <trim prefix="where" prefixOverrides="and | or">
-            <if test="jobId != null  and jobId != ''"> and job_id = #{jobId}</if>
-            <if test="status != null  and status != ''"> and status = #{status}</if>
-            <if test="deviceId != null  and deviceId != ''"> and device_id = #{deviceId}</if>
-            <if test="start != null  and start != ''"> and start = #{start}</if>
-            <if test="end != null and start != '' "> and end = #{end}</if>
+            <if test="jobId != null  and jobId != ''">and job_id = #{jobId}</if>
+            <if test="status != null  and status != ''">and status = #{status}</if>
+            <if test="deviceId != null  and deviceId != ''">and device_id = #{deviceId}</if>
+            <if test="start != null  and start != ''">and start = #{start}</if>
+            <if test="end != null and start != '' ">and end = #{end}</if>
         </trim>
     </select>
 
@@ -32,17 +29,18 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <!--根据日期获取-->
     <select id="getPullWorkstepByDate" resultType="java.util.Map">
-        select job_id, status, device_id, amount_planned, waste_planned, amount_produced, waste_produced, device_id, start, end, DATE_FORMAT(create_time,'%Y-%m-%d %H:%i:%s') as createTime from job_workstep
+        select job_id, status, device_id, amount_planned, waste_planned, amount_produced, waste_produced, device_id,
+        start, end, DATE_FORMAT(create_time,'%Y-%m-%d %H:%i:%s') as createTime from job_workstep
         where
         create_time between #{startDate} and #{endDate}
         order by create_time desc
     </select>
 
 
-
     <!--根据jobId获取-->
     <select id="getPullWorkstepByJobId" resultType="java.util.Map">
-        select job_id, status, device_id, amount_planned, waste_planned, amount_produced, waste_produced, device_id, start, end, DATE_FORMAT(create_time,'%Y-%m-%d %H:%i:%s') as createTime from job_workstep
+        select job_id, status, device_id, amount_planned, waste_planned, amount_produced, waste_produced, device_id,
+        start, end, DATE_FORMAT(create_time,'%Y-%m-%d %H:%i:%s') as createTime from job_workstep
         where
         job_id = #{jobId}
         order by create_time desc

@@ -7,6 +7,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -21,9 +22,8 @@ public class DeviceController {
     private SignalStatusService signalStatusService;
 
 
-
     @PostMapping("/postPull")
-    public List<SignalStatusVO> postPullSignalStatus(@RequestBody SignalStatusVO signalStatusVO){
+    public List<SignalStatusVO> postPullSignalStatus(@RequestBody SignalStatusVO signalStatusVO) {
         return signalStatusService.postPullSignalStatus(signalStatusVO);
     }
 
@@ -43,20 +43,18 @@ public class DeviceController {
     @GetMapping("/getPullSignalStatusByDate")
     public Map getPullSignalStatusByDate(@RequestParam(value = "date", defaultValue = "2022-10-10") Date date,
                                          @RequestParam(value = "deviceId", defaultValue = "7706") String deviceId,
-                                         @RequestParam(value = "currentPage",required = false, defaultValue = "1") Integer currentPage,
+                                         @RequestParam(value = "currentPage", required = false, defaultValue = "1") Integer currentPage,
                                          @RequestParam(value = "pageSize", required = false, defaultValue = "10") Integer pageSize) {
         return signalStatusService.getPullSignalStatusCopyByDate(date, deviceId, currentPage, pageSize);
     }
 
 
-
     @GetMapping("/getDeviceDataResult")
-    public  Map<String,Object> getDeviceDataResult(
+    public Map<String, Object> getDeviceDataResult(
             @RequestParam(value = "date") Date date,
             @RequestParam(value = "deviceId") String deviceId) {
-        return signalStatusService.aa(date,deviceId);
+        return signalStatusService.aa(date, deviceId);
     }
-
 
 
 }

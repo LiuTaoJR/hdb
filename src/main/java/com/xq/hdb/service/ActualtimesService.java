@@ -7,5 +7,4 @@ import com.xq.hdb.entity.JobWorkstepActualtimes;
 public interface ActualtimesService extends IService<JobWorkstepActualtimes> {
 
 
-
 }

@@ -5,8 +5,7 @@ package com.xq.hdb.utils.constant;
  *
  * @author xiqi
  */
-public class Constants
-{
+public class Constants {
     /**
      * UTF-8 字符集
      */

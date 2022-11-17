@@ -16,27 +16,40 @@ import org.springframework.stereotype.Component;
 @Data
 public class HdbConstantConfig {
 
-    /** 远端服务器域名 */
+    /**
+     * 远端服务器域名
+     */
     private String domainName;
 
-    /** 远端服务器地址 */
+    /**
+     * 远端服务器地址
+     */
     private String serverUrl;
 
-    /** sqlite job数据库url */
+    /**
+     * sqlite job数据库url
+     */
     private String sqliteDBJobUrl;
 
-    /** sqlite other数据库url */
+    /**
+     * sqlite other数据库url
+     */
     private String sqliteDBOtherUrl;
 
-    /**数据备份地址 */
+    /**
+     * 数据备份地址
+     */
     private String backupDBUrl;
 
-    /**数据源服务器接口身份认证 */
+    /**
+     * 数据源服务器接口身份认证
+     */
     private String authorization;
 
-    /** 加密盐 */
+    /**
+     * 加密盐
+     */
     private String salt;
-
 
 
 }

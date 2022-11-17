@@ -17,33 +17,29 @@ import java.util.Map;
  * @date 2022-06-07
  */
 @Mapper
-public interface JobWorkstepMapper extends BaseMapper<JobWorkstep>{
-
+public interface JobWorkstepMapper extends BaseMapper<JobWorkstep> {
 
 
     Integer isExists(String workstepId);
 
 
-
-    List<JobWorkstep> getWorkstepList(@Param("jobId") String jobId,@Param("status") String status,@Param("deviceId") String deviceId,@Param("start") String start,@Param("end") String end);
-
+    List<JobWorkstep> getWorkstepList(@Param("jobId") String jobId, @Param("status") String status, @Param("deviceId") String deviceId, @Param("start") String start, @Param("end") String end);
 
 
     List<String> getTypesByWorkstepId(String workstepId);
 
 
-
     /**
      * 根据日期获取
+     *
      * @return
      */
     List<Map> getPullWorkstepByDate(@Param("startDate") Date startDate, @Param("endDate") Date endDate);
 
 
-
-
     /**
      * 根据jobId
+     *
      * @return
      */
     List<Map> getPullWorkstepByJobId(String jobId);

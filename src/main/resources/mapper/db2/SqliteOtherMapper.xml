@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper
-PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.xq.hdb.mapper.db2.SqliteOtherMapper">
-
 
 
     <!--获取库内所有表-->
@@ -19,10 +18,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 
     <!--缩减数据文件-->
-    <update id="cutDBFile" >
+    <update id="cutDBFile">
         vacuum;
     </update>
-
 
 
 </mapper>

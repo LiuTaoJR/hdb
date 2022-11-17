@@ -19,4 +19,5 @@ public class DeviceDataVO {
     private String statusDetails;
     private String amount;
     private String waste;
+    private String speed;
 }

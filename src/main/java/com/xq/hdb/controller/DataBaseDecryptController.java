@@ -14,7 +14,7 @@ public class DataBaseDecryptController {
     private DataBaseDecryptService dataBaseDecryptService;
 
     @GetMapping("/test")
-    public String test(){
+    public String test() {
         dataBaseDecryptService.decrypt();
         return "成功";
     }

@@ -13,8 +13,7 @@ import java.util.List;
  */
 
 @Data
-public class SignalRessourceVO
-{
+public class SignalRessourceVO {
     private static final long serialVersionUID = 1L;
 
 
@@ -28,8 +27,6 @@ public class SignalRessourceVO
 
 
     private List<SignalRessourceInfoVO> RessourceInfo;
-
-
 
 
 }

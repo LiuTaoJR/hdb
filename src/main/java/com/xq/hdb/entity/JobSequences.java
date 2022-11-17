@@ -11,8 +11,7 @@ import lombok.Data;
  * @date 2022-06-07
  */
 @Data
-public class JobSequences
-{
+public class JobSequences {
     private static final long serialVersionUID = 1L;
 
 

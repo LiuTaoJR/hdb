@@ -11,8 +11,7 @@ import lombok.Data;
  * @date 2022-06-07
  */
 @Data
-public class JobSignalResinfoResourceset
-{
+public class JobSignalResinfoResourceset {
     private static final long serialVersionUID = 1L;
 
 

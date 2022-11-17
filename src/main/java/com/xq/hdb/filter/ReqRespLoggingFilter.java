@@ -22,10 +22,11 @@ public class ReqRespLoggingFilter implements Filter, Ordered {
 
     //是否开启日志
     @Value("${hdb.isOpenLog:false}")
-    private  boolean isOpenLog;
+    private boolean isOpenLog;
 
     @Value("#{'${hdb.notLogFilerPath}'.split(',')}")
     private List<String> NOT_FILTER_PATH;
+
     @Override
     public int getOrder() {
         return -1;
@@ -35,8 +36,8 @@ public class ReqRespLoggingFilter implements Filter, Ordered {
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         //转换
-        HttpServletRequest req = (HttpServletRequest)request;
-        HttpServletResponse resp = (HttpServletResponse)response;
+        HttpServletRequest req = (HttpServletRequest) request;
+        HttpServletResponse resp = (HttpServletResponse) response;
         req.setCharacterEncoding("utf-8");
         resp.setContentType("text/html;charset=utf-8");
 
@@ -45,11 +46,11 @@ public class ReqRespLoggingFilter implements Filter, Ordered {
             RequestWrapper requestWrapper = new RequestWrapper(req);
             ResponseWrapper responseWrapper = new ResponseWrapper(resp);
             boolean isFilter = isFilter(requestWrapper.getRequestUri());
-            if(isOpenLog && isFilter){
+            if (isOpenLog && isFilter) {
                 this.logRequest(requestWrapper);
             }
             chain.doFilter(requestWrapper, responseWrapper);
-            if(isOpenLog && isFilter){
+            if (isOpenLog && isFilter) {
                 this.logResponse(responseWrapper);
             }
 
@@ -60,9 +61,9 @@ public class ReqRespLoggingFilter implements Filter, Ordered {
     }
 
     private boolean isFilter(String requestUri) {
-        if(!CollectionUtils.isEmpty(NOT_FILTER_PATH)){
+        if (!CollectionUtils.isEmpty(NOT_FILTER_PATH)) {
             for (String notFilterUrl : NOT_FILTER_PATH) {
-                if(requestUri.contains(notFilterUrl)){
+                if (requestUri.contains(notFilterUrl)) {
                     return false;
                 }
             }
@@ -119,8 +120,8 @@ public class ReqRespLoggingFilter implements Filter, Ordered {
     private void printRequestHeaders(StringBuilder b, RequestWrapper request) {
         Enumeration headerNameEnum = request.getHeaderNames();
 
-        while(headerNameEnum.hasMoreElements()) {
-            String headerName = (String)headerNameEnum.nextElement();
+        while (headerNameEnum.hasMoreElements()) {
+            String headerName = (String) headerNameEnum.nextElement();
             String headerValue = request.getHeader(headerName);
             b.append("> ").append(headerName).append(": ").append(headerValue).append('\n');
         }
@@ -131,8 +132,8 @@ public class ReqRespLoggingFilter implements Filter, Ordered {
         Collection<String> headerNames = response.getHeaderNames();
         Iterator var4 = headerNames.iterator();
 
-        while(var4.hasNext()) {
-            String headerName = (String)var4.next();
+        while (var4.hasNext()) {
+            String headerName = (String) var4.next();
             b.append("< ").append(headerName).append(": ").append(response.getHeader(headerName)).append('\n');
         }
 

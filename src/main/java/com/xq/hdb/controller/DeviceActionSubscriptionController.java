@@ -22,6 +22,7 @@ public class DeviceActionSubscriptionController {
 
     /**
      * 3.2.5设备行动订阅
+     *
      * @param action
      * @param url
      * @param type
@@ -29,15 +30,14 @@ public class DeviceActionSubscriptionController {
      */
     @GetMapping("/subscription")
     @ResponseBody
-    public Map<String, Object> subscription(String action, String url, String type){
+    public Map<String, Object> subscription(String action, String url, String type) {
         return deviceActionSubscriptionService.subscription(action, url, type);
     }
 
 
-
     @PostMapping("/dealSignal")
     @ResponseBody
-    public String dealSignal(@RequestBody String jsonStr){
+    public String dealSignal(@RequestBody String jsonStr) {
         return deviceActionSubscriptionService.dealSignal(jsonStr);
     }
 

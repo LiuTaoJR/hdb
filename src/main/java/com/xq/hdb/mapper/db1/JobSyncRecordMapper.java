@@ -20,40 +20,35 @@ public interface JobSyncRecordMapper extends BaseMapper<JobSyncRecord> {
 
     /**
      * 根据同步状态获取jobId
+     *
      * @param status
      * @return
      */
     List<String> getjobIdBySyncStatusJob(String status);
 
 
-
     /**
      * 根据同步状态获取jobId
+     *
      * @param status
      * @return
      */
     List<String> getjobIdBySyncStatusWorkstep(String status);
 
 
-
     /**
      * 校验jobId是否存在
+     *
      * @param jobId
      * @return
      */
     Integer isExists(String jobId);
 
 
-
-
-
     Integer upsateSyncStatusJob(@Param("jobId") String jobId, @Param("status") String status);
 
 
-
-
     Integer upsateSyncStatusWorkstep(@Param("jobId") String jobId, @Param("status") String status);
-
 
 
 }

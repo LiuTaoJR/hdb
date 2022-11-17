@@ -1,16 +1,12 @@
 package com.xq.hdb.utils;
 
 
-
-
 import javax.crypto.*;
 import javax.crypto.spec.DESKeySpec;
 import java.security.SecureRandom;
 
 public class DESUtils {
     private final static String DES = "DES";
-
-
 
 
     // 加密

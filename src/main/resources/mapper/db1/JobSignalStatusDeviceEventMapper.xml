@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper
-PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.xq.hdb.mapper.db1.JobSignalStatusDeviceEventMapper">
 
 
-
-
-    <select id="getDeviceEventByDeviceId" parameterType="java.lang.String" resultType="com.xq.hdb.entity.JobSignalStatusDeviceEvent">
+    <select id="getDeviceEventByDeviceId" parameterType="java.lang.String"
+            resultType="com.xq.hdb.entity.JobSignalStatusDeviceEvent">
         select * from job_signal_status_device_event where signaStatusDeviceId = #{statusDeviceId}
     </select>
 
@@ -21,7 +20,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </select>
 
 
-    <select id="pageList" parameterType="java.lang.Integer" resultType="com.xq.hdb.entity.JobSignalStatusDeviceEvent" >
+    <select id="pageList" parameterType="java.lang.Integer" resultType="com.xq.hdb.entity.JobSignalStatusDeviceEvent">
         select * from job_signal_status_device_event limit #{a},#{b}
     </select>
 

@@ -11,8 +11,7 @@ import lombok.Data;
  */
 
 @Data
-public class JobSignalRes
-{
+public class JobSignalRes {
     private static final long serialVersionUID = 1L;
 
 

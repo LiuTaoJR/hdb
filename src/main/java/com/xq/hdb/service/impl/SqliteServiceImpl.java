@@ -20,7 +20,6 @@ public class SqliteServiceImpl implements SqliteService {
     private SqliteOtherMapper sqliteOtherMapper;
 
 
-
     @Override
     public List<String> getAllTable() {
         return sqliteOtherMapper.getAllTable();
@@ -29,25 +28,24 @@ public class SqliteServiceImpl implements SqliteService {
 
     /**
      * 刷新数据库
+     *
      * @param tables
      */
     @Override
     public void refreshData(List<String> tables) {
-        try{
-            if(tables != null && tables.size() > 0){
+        try {
+            if (tables != null && tables.size() > 0) {
                 Integer insertDateMonth = Integer.valueOf(DateUtils.getLastMonth());
-                for(String table : tables){
+                for (String table : tables) {
                     sqliteOtherMapper.refreshData(table, insertDateMonth);
                 }
             }
             sqliteOtherMapper.cutDBFile();
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
-            log.error("refreshData方法异常:{}",e.getMessage());
+            log.error("refreshData方法异常:{}", e.getMessage());
         }
     }
-
-
 
 
 }

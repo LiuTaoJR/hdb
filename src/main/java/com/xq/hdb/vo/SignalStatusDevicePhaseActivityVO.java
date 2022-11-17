@@ -12,8 +12,7 @@ import java.util.Date;
  * @date 2022-06-07
  */
 @Data
-public class SignalStatusDevicePhaseActivityVO
-{
+public class SignalStatusDevicePhaseActivityVO {
     private static final long serialVersionUID = 1L;
 
 
@@ -27,8 +26,6 @@ public class SignalStatusDevicePhaseActivityVO
 
 
     private Date StartTime;
-
-
 
 
 }

@@ -11,9 +11,7 @@ import java.util.List;
 public interface JobWorkstepActualtimesMapper extends BaseMapper<JobWorkstepActualtimes> {
 
 
-
     List<JobWorkstepActualtimes> getActualTimesByWorkstepId(String workstepId);
-
 
 
     Integer deleteActualtimeByWorkstepId(String workstepId);

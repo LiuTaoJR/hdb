@@ -12,7 +12,7 @@ import java.util.Map;
 
 public interface SignalStatusService {
 
-    List<SignalStatusVO> postPullSignalStatus(SignalStatusVO signalStatusVO );
+    List<SignalStatusVO> postPullSignalStatus(SignalStatusVO signalStatusVO);
 
     Map getPullSignalStatus(String jobId, Long speed, String deviceId, String eventId, String stutas);
 
@@ -21,7 +21,7 @@ public interface SignalStatusService {
     Map getPullSignalStatusCopyByDate(Date date, String deviceId, Integer currentPage, Integer pageSize);
 
     //今日统计查询
-    List<Map> getStatisticsDate(Date date,String deviceId,String eventId);
+    List<Map> getStatisticsDate(Date date, String deviceId, String eventId);
 
     //分组统计查询job_id
     List<Map> getJobIdOnly(Date date);
@@ -30,19 +30,19 @@ public interface SignalStatusService {
     List<DeviceDataVO> getJobSignalStatus(Date date, String deviceId);
 
     //查询成品数量
-    List<Map> getProductGood(Date date,String deviceId);
+    List<Map> getProductGood(Date date, String deviceId);
 
     //查询生产废张
-    List<Map> getProductWaste(Date date,String deviceId);
+    List<Map> getProductWaste(Date date, String deviceId);
 
     //查询过版纸
-    List<Map> getPassPaper(Date date,String deviceId);
+    List<Map> getPassPaper(Date date, String deviceId);
 
     //查询印刷时间
-    List<Map> getPrintTime(Date date,String deviceId);
+    List<Map> getPrintTime(Date date, String deviceId);
 
-    DeviceDataResultVO getDeviceDataResult(Date date,String deviceId);
+    DeviceDataResultVO getDeviceDataResult(Date date, String deviceId);
 
-    Map<String,Object> aa(Date date,String deviceId);
+    Map<String, Object> aa(Date date, String deviceId);
 
 }

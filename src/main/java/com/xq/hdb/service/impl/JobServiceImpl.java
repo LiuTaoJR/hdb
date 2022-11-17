@@ -1,7 +1,6 @@
 package com.xq.hdb.service.impl;
 
 
-
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -45,7 +44,6 @@ import static sun.security.x509.CertificateAlgorithmId.ALGORITHM;
 public class JobServiceImpl extends ServiceImpl<JobMapper, Job> implements JobService {
 
 
-
     @Autowired
     private HdbConstantConfig hdbConstantConfig;
 
@@ -71,21 +69,20 @@ public class JobServiceImpl extends ServiceImpl<JobMapper, Job> implements JobSe
     private JobSyncRecordMapper jobSyncRecordMapper;
 
 
-
     @Override
     public Map jobInsert(String jsonStr) {
         Map result = new HashMap();
-        result.put("code",200);
+        result.put("code", 200);
 
         Gson gson = new Gson();
         Map<String, Object> map = new HashMap<String, Object>();
         Map<String, Object> mapResult = gson.fromJson(jsonStr, map.getClass());
 
-        try{
+        try {
 
-            if(mapResult != null){
+            if (mapResult != null) {
                 Map jobMap = (Map) mapResult.get("job");
-                if(jobMap != null ){
+                if (jobMap != null) {
                     Job job = new Job();
                     job.setId(AssignUtils.encrypt(jobMap.get("id")));
                     job.setName(AssignUtils.encrypt(jobMap.get("name")));
@@ -104,51 +101,45 @@ public class JobServiceImpl extends ServiceImpl<JobMapper, Job> implements JobSe
                     job.setSourceJobIds(AssignUtils.encrypt(jobMap.get("shopId")));
 
                     int i = jobMapper.isExists(job.getId());
-                    if(i==0){
+                    if (i == 0) {
                         jobMapper.insert(job);
-                    }else if(i>0){
+                    } else if (i > 0) {
                         jobMapper.updateById(job);
                     }
 
                     //jobStatus
-                    if(jobMap.get("jobStatus") != null){
-                        jobStatus((Map)jobMap.get("jobStatus"), job.getId());
+                    if (jobMap.get("jobStatus") != null) {
+                        jobStatus((Map) jobMap.get("jobStatus"), job.getId());
                     }
 
                     //sequences
-                    if(jobMap.get("sequences") != null){
-                        jobSequences((List)jobMap.get("sequences"), job.getId());
+                    if (jobMap.get("sequences") != null) {
+                        jobSequences((List) jobMap.get("sequences"), job.getId());
                     }
 
                     //gangJobs
-                    if(jobMap.get("gangJobs") != null){
-                        gangJobs((List)jobMap.get("gangJobs"), job.getId());
+                    if (jobMap.get("gangJobs") != null) {
+                        gangJobs((List) jobMap.get("gangJobs"), job.getId());
                     }
 
                 }
 
             }
 
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
-            log.error("jobInsert方法异常:{}",e.getMessage());
-            result.put("code",500);
+            log.error("jobInsert方法异常:{}", e.getMessage());
+            result.put("code", 500);
         }
-
 
 
         return result;
     }
 
 
-
-
-
-
-
-    @Transactional(rollbackFor = Exception.class,propagation = Propagation.NESTED)
+    @Transactional(rollbackFor = Exception.class, propagation = Propagation.NESTED)
     @Log(title = "pullJob", businessType = BusinessType.INSERT)
-    public synchronized void pullJob(){
+    public synchronized void pullJob() {
 
         //校验数据库是否被操作
         /*if(LockConfig.getLockStatus() == 1){
@@ -157,21 +148,21 @@ public class JobServiceImpl extends ServiceImpl<JobMapper, Job> implements JobSe
             LockConfig.setLockStatus(1);
         }*/
 
-        try{
+        try {
             List<String> jobIds = jobSyncRecordMapper.getjobIdBySyncStatusJob("N");
-            if(jobIds != null  && jobIds.size()>0){
-                for(String jobId : jobIds){
+            if (jobIds != null && jobIds.size() > 0) {
+                for (String jobId : jobIds) {
                     jobId = AssignUtils.decryptionToStr(jobId);
                     //请求获取job
                     String jId = URLEncoder.encode(jobId, "UTF-8");
-                    String jobUrl = hdbConstantConfig.getDomainName()+"/PrinectAPILocal/rest/job/"+jId;
+                    String jobUrl = hdbConstantConfig.getDomainName() + "/PrinectAPILocal/rest/job/" + jId;
                     String jobParam = null;
-                    Map<String, Object> mapResult = HttpUtils.sendGetReturnMap(jobUrl,jobParam,hdbConstantConfig.getAuthorization());
-                    log.info("请求获取job数据："+mapResult);
+                    Map<String, Object> mapResult = HttpUtils.sendGetReturnMap(jobUrl, jobParam, hdbConstantConfig.getAuthorization());
+                    log.info("请求获取job数据：" + mapResult);
 
-                    if(mapResult != null){
+                    if (mapResult != null) {
                         Map jobMap = (Map) mapResult.get("job");
-                        if(jobMap != null ){
+                        if (jobMap != null) {
                             Job job = new Job();
                             job.setId(AssignUtils.encrypt(jobMap.get("id")));
                             job.setName(AssignUtils.encrypt(jobMap.get("name")));
@@ -190,9 +181,9 @@ public class JobServiceImpl extends ServiceImpl<JobMapper, Job> implements JobSe
                             job.setSourceJobIds(AssignUtils.encrypt(jobMap.get("shopId")));
 
                             int i = jobMapper.isExists(job.getId());
-                            if(i==0){
+                            if (i == 0) {
                                 jobMapper.insert(job);
-                            }else if(i>0){
+                            } else if (i > 0) {
                                 jobMapper.updateById(job);
                             }
 
@@ -200,18 +191,18 @@ public class JobServiceImpl extends ServiceImpl<JobMapper, Job> implements JobSe
                             jobSyncRecordMapper.upsateSyncStatusJob(jobId, "Y");
 
                             //jobStatus
-                            if(jobMap.get("jobStatus") != null){
-                                jobStatus((Map)jobMap.get("jobStatus"), job.getId());
+                            if (jobMap.get("jobStatus") != null) {
+                                jobStatus((Map) jobMap.get("jobStatus"), job.getId());
                             }
 
                             //sequences
-                            if(jobMap.get("sequences") != null){
-                                jobSequences((List)jobMap.get("sequences"), job.getId());
+                            if (jobMap.get("sequences") != null) {
+                                jobSequences((List) jobMap.get("sequences"), job.getId());
                             }
 
                             //gangJobs
-                            if(jobMap.get("gangJobs") != null){
-                                gangJobs((List)jobMap.get("gangJobs"), job.getId());
+                            if (jobMap.get("gangJobs") != null) {
+                                gangJobs((List) jobMap.get("gangJobs"), job.getId());
                             }
 
                         }
@@ -220,7 +211,7 @@ public class JobServiceImpl extends ServiceImpl<JobMapper, Job> implements JobSe
 
                 }
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             log.error("拉取job数据异常", e);
         } finally {
@@ -230,12 +221,10 @@ public class JobServiceImpl extends ServiceImpl<JobMapper, Job> implements JobSe
     }
 
 
-
-
     //@Transactional(rollbackFor = Exception.class,propagation = Propagation.NESTED)
     @Log(title = "jobStatus", businessType = BusinessType.INSERT)
     public void jobStatus(Map jobStatus, String jobId) throws Exception {
-        if(jobStatus!= null){
+        if (jobStatus != null) {
             int insertDateMonth = Integer.valueOf(DateUtils.currentYearMonth());
             //清空与jobId相关联的就数据
             jobStatusMapper.delectJobStatusByjobId(jobId);
@@ -250,8 +239,8 @@ public class JobServiceImpl extends ServiceImpl<JobMapper, Job> implements JobSe
 
             //milestones
             List<Map> milestonesList = (List) jobStatus.get("milestones");
-            if(milestonesList != null && milestonesList.size() > 0){
-                for(Map milestonesMap : milestonesList){
+            if (milestonesList != null && milestonesList.size() > 0) {
+                for (Map milestonesMap : milestonesList) {
                     JobStatusMilestones milestones = new JobStatusMilestones();
                     milestones.setId(AssignUtils.getUUid());
                     milestones.setStatusId(status.getId());
@@ -268,7 +257,7 @@ public class JobServiceImpl extends ServiceImpl<JobMapper, Job> implements JobSe
     }
 
 
-    @Transactional(rollbackFor = Exception.class,propagation = Propagation.NESTED)
+    @Transactional(rollbackFor = Exception.class, propagation = Propagation.NESTED)
     @Log(title = "jobSequences", businessType = BusinessType.INSERT)
     public void jobSequences(List<Map> jobSequences, String jobId) throws Exception {
         if (jobSequences != null) {
@@ -277,7 +266,7 @@ public class JobServiceImpl extends ServiceImpl<JobMapper, Job> implements JobSe
             jobSequencesMapper.delectJobSequencesByjobId(jobId);
 
             //sequences
-            for(Map sequencesMap : jobSequences){
+            for (Map sequencesMap : jobSequences) {
                 JobSequences sequences = new JobSequences();
                 sequences.setId(AssignUtils.getUUid());
                 sequences.setJobId(jobId);
@@ -291,8 +280,7 @@ public class JobServiceImpl extends ServiceImpl<JobMapper, Job> implements JobSe
     }
 
 
-
-    @Transactional(rollbackFor = Exception.class,propagation = Propagation.NESTED)
+    @Transactional(rollbackFor = Exception.class, propagation = Propagation.NESTED)
     @Log(title = "gangJobs", businessType = BusinessType.INSERT)
     public void gangJobs(List<Map> gangJobs, String jobId) throws Exception {
         if (gangJobs != null) {
@@ -302,7 +290,7 @@ public class JobServiceImpl extends ServiceImpl<JobMapper, Job> implements JobSe
             jobGangJobMapper.delectJobGangJobsByjobId(jobId);
 
             //sequences
-            for(Map gangJobsMap : gangJobs){
+            for (Map gangJobsMap : gangJobs) {
                 JobGangJob JobGangJob = new JobGangJob();
                 JobGangJob.setId(AssignUtils.getUUid());
                 JobGangJob.setJobId(jobId);
@@ -316,24 +304,22 @@ public class JobServiceImpl extends ServiceImpl<JobMapper, Job> implements JobSe
     }
 
 
-
     @Override
     public Map getJobByJobId(String jobId) {
         return null;
     }
 
     @Override
-    public Object  decryption(String str) {
+    public Object decryption(String str) {
         try {
-            String a=AssignUtils.decryptionToStr(str);
-            System.out.println("--------------"+a+"------------");
+            String a = AssignUtils.decryptionToStr(str);
+            System.out.println("--------------" + a + "------------");
             return a;
-        }catch (Exception e){
+        } catch (Exception e) {
             return null;
         }
 
     }
-
 
 
 }

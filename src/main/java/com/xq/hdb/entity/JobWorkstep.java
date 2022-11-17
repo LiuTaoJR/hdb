@@ -12,8 +12,7 @@ import java.util.Date;
  * @date 2022-06-07
  */
 @Data
-public class JobWorkstep
-{
+public class JobWorkstep {
     private static final long serialVersionUID = 1L;
 
 

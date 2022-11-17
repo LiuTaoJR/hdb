@@ -1,25 +1,22 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper
-PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.xq.hdb.mapper.db1.JobSignalStatusMapper">
 
 
-
-
     <!--判断是否存在此id的数据-->
-    <select id="getStatusList"  resultType="com.xq.hdb.entity.JobSignalStatus">
+    <select id="getStatusList" resultType="com.xq.hdb.entity.JobSignalStatus">
         select ss.* from job_signal_status ss
         left join job_signal_status_device ssd on ss.id = ssd.signalStatusId
         left join job_signal_status_device_phase ssdp on ssd.id = ssdp.signalStatusDeviceId
         <trim prefix="where" prefixOverrides="and | or">
-            <if test="deviceId != null  and deviceId != ''"> and ss.device_id = #{deviceId}</if>
-            <if test="jobId != null  and jobId != ''"> and ssdp.job_id = #{jobId}</if>
-            <if test="speed != null  and speed != ''"> and ssd.speed = #{speed}</if>
-            <if test="status != null  and status != ''"> and ssdp.status = #{status}</if>
+            <if test="deviceId != null  and deviceId != ''">and ss.device_id = #{deviceId}</if>
+            <if test="jobId != null  and jobId != ''">and ssdp.job_id = #{jobId}</if>
+            <if test="speed != null  and speed != ''">and ssd.speed = #{speed}</if>
+            <if test="status != null  and status != ''">and ssdp.status = #{status}</if>
         </trim>
     </select>
-
 
 
     <!--根据日期获取数据总数-->
@@ -61,7 +58,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         limit #{startIndex}, #{pageSize}
     </select>
 
-    <select id="pageList" parameterType="java.lang.Integer" resultType="com.xq.hdb.entity.JobSignalStatus" >
+    <select id="pageList" parameterType="java.lang.Integer" resultType="com.xq.hdb.entity.JobSignalStatus">
         select * from job_signal_status limit #{a},#{b}
     </select>
 

@@ -1,4 +1,5 @@
 package com.xq.hdb;
+
 import com.baomidou.mybatisplus.annotation.DbType;
 import com.baomidou.mybatisplus.generator.AutoGenerator;
 import com.baomidou.mybatisplus.generator.InjectionConfig;
@@ -14,6 +15,7 @@ public class CodeGenerator {
     static String author = "author"; // 作者
     static String table = "tbl_test"; // 表，用逗号隔开
     static String table2 = "tbl_test";
+
     public static void main(String[] args) {
         // 代码生成器
         AutoGenerator mpg = new AutoGenerator();

@@ -17,21 +17,17 @@ import java.util.Map;
  * @date 2022-06-07
  */
 @Mapper
-public interface JobSignalStatusHeaderMapper extends BaseMapper<JobSignalStatusHeader>{
+public interface JobSignalStatusHeaderMapper extends BaseMapper<JobSignalStatusHeader> {
 
 
     /**
-     *
      * @param signalStatusId
      * @return
      */
     List<Map> getHeaderBySignalStatusId(String signalStatusId);
 
 
-
-
     Date getTimeByStatusIdAndDeviceId(@Param("signalStatusId") String signalStatusId, @Param("deviceId") String deviceId);
-
 
 
     Date getCreateTimeByStatusIdAndDeviceId(@Param("signalStatusId") String signalStatusId, @Param("deviceId") String deviceId);

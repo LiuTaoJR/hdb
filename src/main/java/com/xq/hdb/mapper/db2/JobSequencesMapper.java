@@ -12,9 +12,7 @@ import org.apache.ibatis.annotations.Mapper;
  * @date 2022-06-07
  */
 @Mapper
-public interface JobSequencesMapper extends BaseMapper<JobSequences>{
-
-
+public interface JobSequencesMapper extends BaseMapper<JobSequences> {
 
 
     Integer delectJobSequencesByjobId(String jobId);

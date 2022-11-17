@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ResVo {
-	private String code;
-	private String msg;
-	private Object data;
+    private String code;
+    private String msg;
+    private Object data;
 }

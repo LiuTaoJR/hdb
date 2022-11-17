@@ -14,8 +14,7 @@ import lombok.Data;
  */
 @Data
 @TableName("job_signal_status_device_phase_part")
-public class JobSignalStatusDevicePhasePart
-{
+public class JobSignalStatusDevicePhasePart {
     private static final long serialVersionUID = 1L;
 
     @TableId("id")

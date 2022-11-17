@@ -1,11 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper
-PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.xq.hdb.mapper.db1.JobSignalStatusHeaderMapper">
-
-
-
 
 
     <select id="getHeaderBySignalStatusId" parameterType="java.lang.String" resultType="java.util.Map">
@@ -17,9 +14,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </select>
 
 
-
-
-    <select id="getTimeByStatusIdAndDeviceId"  resultType="java.util.Date">
+    <select id="getTimeByStatusIdAndDeviceId" resultType="java.util.Date">
         select data_time from job_signal_status_header
         where
         signalStatusId = #{signalStatusId}
@@ -29,7 +24,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </select>
 
 
-    <select id="getCreateTimeByStatusIdAndDeviceId"  resultType="java.util.Date">
+    <select id="getCreateTimeByStatusIdAndDeviceId" resultType="java.util.Date">
         select create_time from job_signal_status_header
         where
         signalStatusId = #{signalStatusId}
@@ -38,7 +33,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         limit 1
     </select>
 
-    <select id="pageList" parameterType="java.lang.Integer" resultType="com.xq.hdb.entity.JobSignalStatusHeader" >
+    <select id="pageList" parameterType="java.lang.Integer" resultType="com.xq.hdb.entity.JobSignalStatusHeader">
         select * from job_signal_status_header limit #{a},#{b}
     </select>
 

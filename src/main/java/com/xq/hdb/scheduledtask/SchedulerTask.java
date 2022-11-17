@@ -22,20 +22,15 @@ public class SchedulerTask {
     private JobCopyService jobCopyService;
 
 
-
-
-
     @Async
     @Scheduled(cron = "0 1 0 15 * ?")
-    public void backupByMonth(){
-        try{
+    public void backupByMonth() {
+        try {
             //SqliteUtils.backupByMonth(hdbConstantConfig.getSqliteDBOtherUrl(), hdbConstantConfig.getBackupDBUrl());
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
-
-
 
 
     @Transactional
@@ -46,16 +41,13 @@ public class SchedulerTask {
     }
 
 
-
-
     @Transactional
     @Scheduled(cron = "0 0/10 * * * ?")
-    public synchronized void pullWorkstep(){
+    public synchronized void pullWorkstep() {
         log.info("SchedulerTask pullWorkstep start：");
         jobWorkstepCopyService.pullWorkstepCopy();
 
     }
-
 
 
 }

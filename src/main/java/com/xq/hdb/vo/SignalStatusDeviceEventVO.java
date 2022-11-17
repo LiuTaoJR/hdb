@@ -1,7 +1,6 @@
 package com.xq.hdb.vo;
 
 
-
 import lombok.Data;
 
 /**
@@ -11,18 +10,14 @@ import lombok.Data;
  * @date 2022-06-07
  */
 @Data
-public class SignalStatusDeviceEventVO
-{
+public class SignalStatusDeviceEventVO {
     private static final long serialVersionUID = 1L;
-
 
 
     private String EventID;
 
 
     private String EventValue;
-
-
 
 
 }

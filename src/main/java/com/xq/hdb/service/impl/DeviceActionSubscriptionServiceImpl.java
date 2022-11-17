@@ -55,7 +55,6 @@ import java.util.*;
 public class DeviceActionSubscriptionServiceImpl implements DeviceActionSubscriptionService {
 
 
-
     @Autowired
     private HdbConstantConfig hdbConstantConfig;
 
@@ -88,13 +87,6 @@ public class DeviceActionSubscriptionServiceImpl implements DeviceActionSubscrip
 
     @Autowired
     private JobSignalResinfoResourcesetResourceMiscconsumableMapper jobSignalResinfoResourcesetResourceMiscconsumableMapper;
-
-
-
-
-
-
-
 
 
     @Autowired
@@ -146,10 +138,9 @@ public class DeviceActionSubscriptionServiceImpl implements DeviceActionSubscrip
     private JobSyncRecordNewMapper jobSyncRecordNewMapper;
 
 
-
-
     /**
      * 设备行动订阅
+     *
      * @param action
      * @param url
      * @param type
@@ -158,14 +149,14 @@ public class DeviceActionSubscriptionServiceImpl implements DeviceActionSubscrip
     @Override
     public Map<String, Object> subscription(String action, String url, String type) {
         Map result = new HashMap();
-        result.put("code",500);
+        result.put("code", 500);
 
         String param = "";
         String msg = "";
 
-        try{
+        try {
             //处理参数
-            param = "action="+action+"&"+"url="+url+"&"+"type="+type;
+            param = "action=" + action + "&" + "url=" + url + "&" + "type=" + type;
 
             //数据重新组合
             MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
@@ -176,27 +167,27 @@ public class DeviceActionSubscriptionServiceImpl implements DeviceActionSubscrip
             ResponseEntity<String> answerResult = sendPostFormData(hdbConstantConfig.getServerUrl(), map, hdbConstantConfig.getAuthorization());
 
             msg = "订阅结果 ：" + answerResult;
-            result.put("code",200);
-            result.put("msg",msg);
+            result.put("code", 200);
+            result.put("msg", msg);
 
-        } catch (ResourceAccessException e){
+        } catch (ResourceAccessException e) {
             e.printStackTrace();
             msg = "调用服务 ResourceAccessException, url=" + hdbConstantConfig.getServerUrl() + ",   参数为=" + param;
             log.error("调用服务 ResourceAccessException, url=" + url + ",param=" + param, e);
-            result.put("code",500);
-            result.put("msg",msg);
-        }catch (ConnectException e){
+            result.put("code", 500);
+            result.put("msg", msg);
+        } catch (ConnectException e) {
             e.printStackTrace();
             msg = "调用服务 ConnectException, url=" + hdbConstantConfig.getServerUrl() + ",   参数为=" + param;
             log.error("调用服务 ConnectException, url=" + url + ",param=" + param, e);
-            result.put("code",500);
-            result.put("msg",msg);
-        }catch (Exception e) {
+            result.put("code", 500);
+            result.put("msg", msg);
+        } catch (Exception e) {
             e.printStackTrace();
             msg = "调用服务 Exception, url=" + hdbConstantConfig.getServerUrl() + ",   参数为=" + param;
             log.error(msg, e);
-            result.put("code",500);
-            result.put("msg",msg);
+            result.put("code", 500);
+            result.put("msg", msg);
         }
 
         return result;
@@ -204,36 +195,36 @@ public class DeviceActionSubscriptionServiceImpl implements DeviceActionSubscrip
 
 
     @Override
-    @Transactional(rollbackFor = Exception.class,propagation = Propagation.NESTED)
+    @Transactional(rollbackFor = Exception.class, propagation = Propagation.NESTED)
     public synchronized String dealSignal(String jsonStr) {
 
         //处理json字符串
         Gson gson = new Gson();
         Map<String, Map<String, List>> mapResult = gson.fromJson(jsonStr, new HashMap<String, Object>().getClass());
-        try{
+        try {
             //校验相关类型
             List<Map> signalRessource = mapResult.get("XJMF").get("SignalRessource");
-            if(signalRessource != null && signalRessource.size() > 0){
+            if (signalRessource != null && signalRessource.size() > 0) {
                 manageRessource(signalRessource);
             }
 
             List<Map> signalStatus = mapResult.get("XJMF").get("SignalStatus");
-            if(signalStatus != null && signalStatus.size() > 0){
+            if (signalStatus != null && signalStatus.size() > 0) {
                 manageStatus(signalStatus);
             }
 
             List<Map> signalNotification = mapResult.get("XJMF").get("SignalNotification");
-            if(signalNotification != null && signalNotification.size() > 0){
+            if (signalNotification != null && signalNotification.size() > 0) {
                 manageNotification(signalNotification);
             }
 
 
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             log.error("数据处理出现异常", e);
             return "500";
 
-        }finally {
+        } finally {
             //LockConfig.setLockStatus(0);
         }
 
@@ -242,21 +233,20 @@ public class DeviceActionSubscriptionServiceImpl implements DeviceActionSubscrip
     }
 
 
-
-
     /**
      * signalRessource
+     *
      * @param signalRessourceList
      */
-    @Transactional(rollbackFor = Exception.class,propagation = Propagation.NESTED)
+    @Transactional(rollbackFor = Exception.class, propagation = Propagation.NESTED)
     @Log(title = "manageRessource", businessType = BusinessType.INSERT)
     public void manageRessource(List<Map> signalRessourceList) throws Exception {
         int insertDateMonth = Integer.valueOf(DateUtils.currentYearMonth());
-        if(signalRessourceList != null && signalRessourceList.size() > 0){
-            for(Map signalRessource : signalRessourceList){
-                if(signalRessource != null){
+        if (signalRessourceList != null && signalRessourceList.size() > 0) {
+            for (Map signalRessource : signalRessourceList) {
+                if (signalRessource != null) {
                     //加密
-                    String id=AssignUtils.getUUid();
+                    String id = AssignUtils.getUUid();
                     JobSignalRes jobSignalRes = new JobSignalRes();
                     jobSignalRes.setId(id);
                     jobSignalRes.setPersonalId(AssignUtils.encrypt(signalRessource.get("PersonalID")));
@@ -267,10 +257,10 @@ public class DeviceActionSubscriptionServiceImpl implements DeviceActionSubscrip
 
 
                     //RessourceInfo
-                    List<Map> ressourceInfoList = (ArrayList)signalRessource.get("RessourceInfo");
-                    if(ressourceInfoList != null && ressourceInfoList.size() > 0){
-                        for(Map ressourceInfo : ressourceInfoList){
-                            if(ressourceInfo != null){
+                    List<Map> ressourceInfoList = (ArrayList) signalRessource.get("RessourceInfo");
+                    if (ressourceInfoList != null && ressourceInfoList.size() > 0) {
+                        for (Map ressourceInfo : ressourceInfoList) {
+                            if (ressourceInfo != null) {
                                 //处理设备信息
                                 JobSignalResinfo signalResinfo = new JobSignalResinfo();
                                 signalResinfo.setId(AssignUtils.getUUid());
@@ -280,7 +270,7 @@ public class DeviceActionSubscriptionServiceImpl implements DeviceActionSubscrip
                                 signalResinfo.setActualAmount(AssignUtils.encrypt(ressourceInfo.get("ActualAmount")));
                                 signalResinfo.setUnit(AssignUtils.encrypt(ressourceInfo.get("Unit")));
                                 //处理jobId
-                                if(ressourceInfo.get("JobID") != null) {
+                                if (ressourceInfo.get("JobID") != null) {
                                     jobSyncRecordService.updateJobId(AssignUtils.encrypt(ressourceInfo.get("JobID")));
                                 }
                                 signalResinfo.setJobId(AssignUtils.encrypt(ressourceInfo.get("JobID")));
@@ -291,13 +281,13 @@ public class DeviceActionSubscriptionServiceImpl implements DeviceActionSubscrip
                                 jobSignalResinfoMapper.insert(signalResinfo);
 
                                 //Comment
-                                if(ressourceInfo.get("Comment") != null){
-                                    commentData((ArrayList)ressourceInfo.get("Comment"), signalResinfo.getId());
+                                if (ressourceInfo.get("Comment") != null) {
+                                    commentData((ArrayList) ressourceInfo.get("Comment"), signalResinfo.getId());
                                 }
 
                                 //ResourceSet
-                                if(ressourceInfo.get("ResourceSet") != null){
-                                    resourceSetData((ArrayList)ressourceInfo.get("ResourceSet"), signalResinfo.getId());
+                                if (ressourceInfo.get("ResourceSet") != null) {
+                                    resourceSetData((ArrayList) ressourceInfo.get("ResourceSet"), signalResinfo.getId());
                                 }
 
                             }
@@ -308,17 +298,15 @@ public class DeviceActionSubscriptionServiceImpl implements DeviceActionSubscrip
         }
 
 
-
     }
 
 
-
-    @Transactional(rollbackFor = Exception.class,propagation = Propagation.NESTED)
+    @Transactional(rollbackFor = Exception.class, propagation = Propagation.NESTED)
     @Log(title = "commentData", businessType = BusinessType.INSERT)
     public void commentData(List<Map> commentList, String signalResinfoId) throws Exception {
-        if(commentList.size() > 0){
+        if (commentList.size() > 0) {
             int insertDateMonth = Integer.valueOf(DateUtils.currentYearMonth());
-            for (Map commentMap : commentList){
+            for (Map commentMap : commentList) {
                 JobSignalResinfoComment comment = new JobSignalResinfoComment();
                 comment.setId(AssignUtils.getUUid());
                 comment.setSignalRessourceinfoId(signalResinfoId);
@@ -333,13 +321,13 @@ public class DeviceActionSubscriptionServiceImpl implements DeviceActionSubscrip
     }
 
 
-    @Transactional(rollbackFor = Exception.class,propagation = Propagation.NESTED)
+    @Transactional(rollbackFor = Exception.class, propagation = Propagation.NESTED)
     @Log(title = "resourceSetData", businessType = BusinessType.INSERT)
     public void resourceSetData(List<Map> signalResinfoResourcesetList, String signalResinfoId) throws Exception {
-        if(signalResinfoResourcesetList.size() > 0){
+        if (signalResinfoResourcesetList.size() > 0) {
             int insertDateMonth = Integer.valueOf(DateUtils.currentYearMonth());
             //Resourceset
-            for (Map resourcesetMap : signalResinfoResourcesetList){
+            for (Map resourcesetMap : signalResinfoResourcesetList) {
                 JobSignalResinfoResourceset resourceset = new JobSignalResinfoResourceset();
                 resourceset.setId(AssignUtils.getUUid());
                 resourceset.setSignalRessourceinfoId(signalResinfoId);
@@ -353,10 +341,10 @@ public class DeviceActionSubscriptionServiceImpl implements DeviceActionSubscrip
                 jobSignalResinfoResourcesetMapper.insert(resourceset);
 
                 //Resource
-                if(resourcesetMap.get("Resource") != null){
-                    List<Map> resourceList = (ArrayList)resourcesetMap.get("Resource");
-                    if(resourceList.size() > 0){
-                        for (Map resourceMap : resourceList){
+                if (resourcesetMap.get("Resource") != null) {
+                    List<Map> resourceList = (ArrayList) resourcesetMap.get("Resource");
+                    if (resourceList.size() > 0) {
+                        for (Map resourceMap : resourceList) {
                             JobSignalResinfoResourcesetResource resource = new JobSignalResinfoResourcesetResource();
                             resource.setId(AssignUtils.getUUid());
                             resource.setSignalRessourceinfoResourcesetId(resourceset.getId());
@@ -366,13 +354,13 @@ public class DeviceActionSubscriptionServiceImpl implements DeviceActionSubscrip
                             jobSignalResinfoResourcesetResourceMapper.insert(resource);
 
                             //AmountPool
-                            if(resourceMap.get("AmountPool") != null){
-                                AmountPoolData((ArrayList)resourceMap.get("AmountPool"), resource.getId());
+                            if (resourceMap.get("AmountPool") != null) {
+                                AmountPoolData((ArrayList) resourceMap.get("AmountPool"), resource.getId());
                             }
 
                             //MiscConsumable
-                            if(resourceMap.get("MiscConsumable") != null){
-                                MiscConsumableData((ArrayList)resourceMap.get("MiscConsumable"), resource.getId());
+                            if (resourceMap.get("MiscConsumable") != null) {
+                                MiscConsumableData((ArrayList) resourceMap.get("MiscConsumable"), resource.getId());
                             }
 
                         }
@@ -386,14 +374,12 @@ public class DeviceActionSubscriptionServiceImpl implements DeviceActionSubscrip
     }
 
 
-
-
-    @Transactional(rollbackFor = Exception.class,propagation = Propagation.NESTED)
+    @Transactional(rollbackFor = Exception.class, propagation = Propagation.NESTED)
     @Log(title = "AmountPoolData", businessType = BusinessType.INSERT)
     public void AmountPoolData(List<Map> AmountPoolList, String resourceId) throws Exception {
-        if(AmountPoolList.size() > 0){
+        if (AmountPoolList.size() > 0) {
             int insertDateMonth = Integer.valueOf(DateUtils.currentYearMonth());
-            for (Map amountPoolMap : AmountPoolList){
+            for (Map amountPoolMap : AmountPoolList) {
                 JobSignalResinfoResourcesetResourceAmountpool amountpool = new JobSignalResinfoResourcesetResourceAmountpool();
                 amountpool.setId(AssignUtils.getUUid());
                 amountpool.setSignalRessourceinfoResourcesetResourceId(resourceId);
@@ -408,13 +394,12 @@ public class DeviceActionSubscriptionServiceImpl implements DeviceActionSubscrip
     }
 
 
-
-    @Transactional(rollbackFor = Exception.class,propagation = Propagation.NESTED)
+    @Transactional(rollbackFor = Exception.class, propagation = Propagation.NESTED)
     @Log(title = "MiscConsumableData", businessType = BusinessType.INSERT)
     public void MiscConsumableData(List<Map> MiscConsumableList, String resourceId) throws Exception {
-        if(MiscConsumableList.size() > 0){
+        if (MiscConsumableList.size() > 0) {
             int insertDateMonth = Integer.valueOf(DateUtils.currentYearMonth());
-            for (Map miscConsumableMap : MiscConsumableList){
+            for (Map miscConsumableMap : MiscConsumableList) {
                 JobSignalResinfoResourcesetResourceMiscconsumable miscConsumable = new JobSignalResinfoResourcesetResourceMiscconsumable();
                 miscConsumable.setId(AssignUtils.getUUid());
                 miscConsumable.setSignaRessourceinfoResourcesetResourceId(resourceId);
@@ -428,26 +413,25 @@ public class DeviceActionSubscriptionServiceImpl implements DeviceActionSubscrip
     }
 
 
-
-
     /*****************************************************signalStatus************************************************************/
 
 
     /**
      * signalStatus
+     *
      * @param signalStatusList
      */
-    @Transactional(rollbackFor = Exception.class,propagation = Propagation.NESTED)
+    @Transactional(rollbackFor = Exception.class, propagation = Propagation.NESTED)
     @Log(title = "manageStatus", businessType = BusinessType.INSERT)
     public void manageStatus(List<Map> signalStatusList) throws Exception {
         String id = null;
-        String time=null;//time转码
+        String time = null;//time转码
         int insertDateMonth = Integer.valueOf(DateUtils.currentYearMonth());
-        if(signalStatusList != null && signalStatusList.size() > 0){
-            for(Map signalStatus : signalStatusList){
-                if(signalStatus != null){
+        if (signalStatusList != null && signalStatusList.size() > 0) {
+            for (Map signalStatus : signalStatusList) {
+                if (signalStatus != null) {
 
-                    id=AssignUtils.getUUid();
+                    id = AssignUtils.getUUid();
                     //加密
                     JobSignalStatus jobSignalStatus = new JobSignalStatus();
                     jobSignalStatus.setId(id);
@@ -460,7 +444,7 @@ public class DeviceActionSubscriptionServiceImpl implements DeviceActionSubscrip
                     jobSignalStatusMapper.insert(jobSignalStatus);
 
                     //非加密
-                    JobSignalStatusNew jobSignalStatusNew=new JobSignalStatusNew();
+                    JobSignalStatusNew jobSignalStatusNew = new JobSignalStatusNew();
                     jobSignalStatusNew.setId(id);
                     jobSignalStatusNew.setTime(signalStatus.get("Time") == null ? null : signalStatus.get("Time").toString());
                     jobSignalStatusNew.setDeviceId(signalStatus.get("DeviceID") == null ? null : signalStatus.get("DeviceID").toString());
@@ -471,17 +455,15 @@ public class DeviceActionSubscriptionServiceImpl implements DeviceActionSubscrip
                     jobSignalStatusNewMapper.insert(jobSignalStatusNew);
 
 
-
-
                     //Header
-                    List<Map> headerList = (ArrayList)signalStatus.get("Header");
-                    if(headerList != null && headerList.size() > 0){
-                        for(Map headerMap : headerList){
-                            if(headerMap != null){
-                                id=AssignUtils.getUUid();
+                    List<Map> headerList = (ArrayList) signalStatus.get("Header");
+                    if (headerList != null && headerList.size() > 0) {
+                        for (Map headerMap : headerList) {
+                            if (headerMap != null) {
+                                id = AssignUtils.getUUid();
 
-                                if(headerMap.get("Time")!=null){
-                                    time=DateUtils.strToDateStr(headerMap.get("Time").toString());
+                                if (headerMap.get("Time") != null) {
+                                    time = DateUtils.strToDateStr(headerMap.get("Time").toString());
                                 }
                                 //处理设备信息
                                 //加密
@@ -514,13 +496,12 @@ public class DeviceActionSubscriptionServiceImpl implements DeviceActionSubscrip
                     }
 
 
-
                     //DeviceInfo
-                    List<Map> deviceInfoList = (ArrayList)signalStatus.get("DeviceInfo");
-                    if(deviceInfoList != null && deviceInfoList.size() > 0){
-                        for(Map deviceInfo : deviceInfoList){
-                            if(deviceInfo != null){
-                                id=AssignUtils.getUUid();
+                    List<Map> deviceInfoList = (ArrayList) signalStatus.get("DeviceInfo");
+                    if (deviceInfoList != null && deviceInfoList.size() > 0) {
+                        for (Map deviceInfo : deviceInfoList) {
+                            if (deviceInfo != null) {
+                                id = AssignUtils.getUUid();
                                 //处理设备信息
                                 //加密
                                 JobSignalStatusDevice device = new JobSignalStatusDevice();
@@ -542,10 +523,10 @@ public class DeviceActionSubscriptionServiceImpl implements DeviceActionSubscrip
                                 deviceNew.setId(id);
                                 deviceNew.setSignalStatusId(jobSignalStatus.getId());
                                 deviceNew.setDeviceId(deviceInfo.get("DeviceID") == null ? null : deviceInfo.get("DeviceID").toString());
-                                deviceNew.setStatus(deviceInfo.get("Status") == null ?null :deviceInfo.get("Status").toString());
-                                deviceNew.setStatusDetails(deviceInfo.get("StatusDetails") == null ? null:deviceInfo.get("StatusDetails").toString());
+                                deviceNew.setStatus(deviceInfo.get("Status") == null ? null : deviceInfo.get("Status").toString());
+                                deviceNew.setStatusDetails(deviceInfo.get("StatusDetails") == null ? null : deviceInfo.get("StatusDetails").toString());
                                 deviceNew.setSpeed(deviceInfo.get("Speed") == null ? null : deviceInfo.get("Speed").toString());
-                                deviceNew.setEventId(deviceInfo.get("EventID") == null ? null :deviceInfo.get("EventID").toString());
+                                deviceNew.setEventId(deviceInfo.get("EventID") == null ? null : deviceInfo.get("EventID").toString());
                                 deviceNew.setTotalProductionCounter(deviceInfo.get("TotalProductionCounter") == null ? null : deviceInfo.get("TotalProductionCounter").toString());
                                 deviceNew.setProductionCounter(deviceInfo.get("ProductionCounter") == null ? null : deviceInfo.get("ProductionCounter").toString());
                                 deviceNew.setModuleIds(deviceInfo.get("ModuleIDs") == null ? null : deviceInfo.get("ModuleIDs").toString());
@@ -553,13 +534,13 @@ public class DeviceActionSubscriptionServiceImpl implements DeviceActionSubscrip
                                 jobSignalStatusDeviceNewMapper.insert(deviceNew);
 
                                 //JobPhase
-                                if(deviceInfo.get("JobPhase") != null){
-                                    jobPhaseData((ArrayList)deviceInfo.get("JobPhase"), device.getId());
+                                if (deviceInfo.get("JobPhase") != null) {
+                                    jobPhaseData((ArrayList) deviceInfo.get("JobPhase"), device.getId());
                                 }
 
                                 //Event
-                                if(deviceInfo.get("Event") != null){
-                                    jobEventData((ArrayList)deviceInfo.get("Event"), device.getId());
+                                if (deviceInfo.get("Event") != null) {
+                                    jobEventData((ArrayList) deviceInfo.get("Event"), device.getId());
                                 }
 
                             }
@@ -573,21 +554,21 @@ public class DeviceActionSubscriptionServiceImpl implements DeviceActionSubscrip
     }
 
 
-    @Transactional(rollbackFor = Exception.class,propagation = Propagation.NESTED)
+    @Transactional(rollbackFor = Exception.class, propagation = Propagation.NESTED)
     @Log(title = "jobPhaseData", businessType = BusinessType.INSERT)
     public void jobPhaseData(List<Map> jobPhaseList, String jobSignalStatusDeviceId) throws Exception {
-        if(jobPhaseList.size() > 0){
+        if (jobPhaseList.size() > 0) {
             String id = null;
             String time = null;  //time格式转码
-            String jobId=null;   //jobId转码
+            String jobId = null;   //jobId转码
             int insertDateMonth = Integer.valueOf(DateUtils.currentYearMonth());
             //JobPhase
-            for (Map jobPhase : jobPhaseList){
-                id=AssignUtils.getUUid();
+            for (Map jobPhase : jobPhaseList) {
+                id = AssignUtils.getUUid();
 
-                if(jobPhase.get("StartTime")!=null){
-                    time=DateUtils.strToDateStr(jobPhase.get("StartTime").toString());
-                    log.info("JobPhase StartTime:"+time);
+                if (jobPhase.get("StartTime") != null) {
+                    time = DateUtils.strToDateStr(jobPhase.get("StartTime").toString());
+                    log.info("JobPhase StartTime:" + time);
                 }
 
                 //加密
@@ -602,12 +583,12 @@ public class DeviceActionSubscriptionServiceImpl implements DeviceActionSubscrip
                 devicePhase.setPercentCompleted(AssignUtils.encrypt(jobPhase.get("PercentCompleted")));
                 devicePhase.setCostCenterId(AssignUtils.encrypt(jobPhase.get("CostCenterID")));
                 //处理jobId
-                if(jobPhase.get("JobID") != null){
-                    jobId = URLDecoder.decode(jobPhase.get("JobID").toString(),"utf-8");
-                    log.info("JobPhase jodId明文:"+jobId);
-                    jobSyncRecordService.updateJobIdNew(jobId,time);
+                if (jobPhase.get("JobID") != null) {
+                    jobId = URLDecoder.decode(jobPhase.get("JobID").toString(), "utf-8");
+                    log.info("JobPhase jodId明文:" + jobId);
+                    jobSyncRecordService.updateJobIdNew(jobId, time);
                     devicePhase.setJobId(AssignUtils.encrypt(jobId));
-                }else{
+                } else {
                     devicePhase.setJobId("");
                 }
                 devicePhase.setWorkstepId(AssignUtils.encrypt(jobPhase.get("WorkStepID")));
@@ -616,14 +597,14 @@ public class DeviceActionSubscriptionServiceImpl implements DeviceActionSubscrip
 
 
                 //非加密
-                JobSignalStatusDevicePhaseNew devicePhaseNew=new JobSignalStatusDevicePhaseNew();
+                JobSignalStatusDevicePhaseNew devicePhaseNew = new JobSignalStatusDevicePhaseNew();
                 devicePhaseNew.setId(id);
                 devicePhaseNew.setSignalStatusDeviceId(jobSignalStatusDeviceId);
                 devicePhaseNew.setStatus(jobPhase.get("Status") == null ? null : jobPhase.get("Status").toString());
                 devicePhaseNew.setAmount(jobPhase.get("Amount") == null ? null : jobPhase.get("Amount").toString());
                 devicePhaseNew.setStartTime(time);
                 devicePhaseNew.setTotalAmount(jobPhase.get("TotalAmount") == null ? null : jobPhase.get("TotalAmount").toString());
-                devicePhaseNew.setWaste(jobPhase.get("Waste") ==null ? null : jobPhase.get("Waste").toString());
+                devicePhaseNew.setWaste(jobPhase.get("Waste") == null ? null : jobPhase.get("Waste").toString());
                 devicePhaseNew.setPercentCompleted(jobPhase.get("PercentCompleted") == null ? null : jobPhase.get("PercentCompleted").toString());
                 devicePhaseNew.setCostCenterId(jobPhase.get("CostCenterID") == null ? null : jobPhase.get("CostCenterID").toString());
                 devicePhaseNew.setJobId(jobId);
@@ -632,21 +613,19 @@ public class DeviceActionSubscriptionServiceImpl implements DeviceActionSubscrip
                 jobSignalStatusDevicePhaseNewMapper.insert(devicePhaseNew);
 
 
-
-
                 //MISDetails
-                if(jobPhase.get("MISDetails") != null){
-                    MISDetailsData((ArrayList)jobPhase.get("MISDetails"), devicePhase.getId());
+                if (jobPhase.get("MISDetails") != null) {
+                    MISDetailsData((ArrayList) jobPhase.get("MISDetails"), devicePhase.getId());
                 }
 
                 //Activity
-                if(jobPhase.get("Activity") != null){
-                    ActivityData((ArrayList)jobPhase.get("Activity"), devicePhase.getId());
+                if (jobPhase.get("Activity") != null) {
+                    ActivityData((ArrayList) jobPhase.get("Activity"), devicePhase.getId());
                 }
 
                 //Part
-                if(jobPhase.get("Part") != null){
-                    PartData((ArrayList)jobPhase.get("Part"), devicePhase.getId());
+                if (jobPhase.get("Part") != null) {
+                    PartData((ArrayList) jobPhase.get("Part"), devicePhase.getId());
                 }
             }
 
@@ -654,14 +633,13 @@ public class DeviceActionSubscriptionServiceImpl implements DeviceActionSubscrip
     }
 
 
-
-    @Transactional(rollbackFor = Exception.class,propagation = Propagation.NESTED)
+    @Transactional(rollbackFor = Exception.class, propagation = Propagation.NESTED)
     @Log(title = "MISDetailsData", businessType = BusinessType.INSERT)
     public void MISDetailsData(List<Map> MISDetailsList, String jobSignalStatusDevicePhaseId) throws Exception {
-        if(MISDetailsList.size() > 0){
+        if (MISDetailsList.size() > 0) {
             String id = AssignUtils.getUUid();
             int insertDateMonth = Integer.valueOf(DateUtils.currentYearMonth());
-            for (Map MISDetails : MISDetailsList){
+            for (Map MISDetails : MISDetailsList) {
                 //加密
                 JobSignalStatusDevicePhaseMisDetails misDetails = new JobSignalStatusDevicePhaseMisDetails();
                 misDetails.setId(id);
@@ -671,7 +649,7 @@ public class DeviceActionSubscriptionServiceImpl implements DeviceActionSubscrip
                 jobSignalStatusDevicePhaseMisDetailsMapper.insert(misDetails);
 
                 //非加密
-                JobSignalStatusDevicePhaseMisDetailsNew misDetailsNew=new JobSignalStatusDevicePhaseMisDetailsNew();
+                JobSignalStatusDevicePhaseMisDetailsNew misDetailsNew = new JobSignalStatusDevicePhaseMisDetailsNew();
                 misDetailsNew.setId(id);
                 misDetailsNew.setSignalStatusDevicePhaseId(jobSignalStatusDevicePhaseId);
                 misDetailsNew.setWorkType(MISDetails.get("WorkType") == null ? null : MISDetails.get("WorkType").toString());
@@ -684,33 +662,30 @@ public class DeviceActionSubscriptionServiceImpl implements DeviceActionSubscrip
     }
 
 
-
-
-
-    @Transactional(rollbackFor = Exception.class,propagation = Propagation.NESTED)
+    @Transactional(rollbackFor = Exception.class, propagation = Propagation.NESTED)
     @Log(title = "ActivityData", businessType = BusinessType.INSERT)
     public void ActivityData(List<Map> ActivityList, String jobSignalStatusDevicePhaseId) throws Exception {
-        if(ActivityList.size() > 0){
-            String id =null;
-            String time =null; //time格式转码
-            String activityName=null; //activityName 转码
+        if (ActivityList.size() > 0) {
+            String id = null;
+            String time = null; //time格式转码
+            String activityName = null; //activityName 转码
             int insertDateMonth = Integer.valueOf(DateUtils.currentYearMonth());
-            for (Map Activity : ActivityList){
-                id=AssignUtils.getUUid();
+            for (Map Activity : ActivityList) {
+                id = AssignUtils.getUUid();
                 //time转码
-                if(Activity.get("StartTime")!=null){
-                    time=DateUtils.strToDateStr(Activity.get("StartTime").toString());
+                if (Activity.get("StartTime") != null) {
+                    time = DateUtils.strToDateStr(Activity.get("StartTime").toString());
                 }
                 //加密
                 JobSignalStatusDevicePhaseActivity activity = new JobSignalStatusDevicePhaseActivity();
                 activity.setId(id);
                 activity.setActivityId(Activity.get("ActivityID").toString());
                 activity.setSignalStatusDevicePhaseId(jobSignalStatusDevicePhaseId);
-                if(Activity.get("ActivityName")!=null){
-                    activityName=URLDecoder.decode(Activity.get("ActivityName").toString(),"utf-8");
-                    log.info("activityName: "+activityName);
+                if (Activity.get("ActivityName") != null) {
+                    activityName = URLDecoder.decode(Activity.get("ActivityName").toString(), "utf-8");
+                    log.info("activityName: " + activityName);
                     activity.setActivityName(AssignUtils.encrypt(activityName));
-                }else{
+                } else {
                     activity.setActivityName("");
                 }
                 activity.setActivityStartTime(AssignUtils.encrypt(time));
@@ -734,15 +709,14 @@ public class DeviceActionSubscriptionServiceImpl implements DeviceActionSubscrip
     }
 
 
-
-    @Transactional(rollbackFor = Exception.class,propagation = Propagation.NESTED)
+    @Transactional(rollbackFor = Exception.class, propagation = Propagation.NESTED)
     @Log(title = "PartData", businessType = BusinessType.INSERT)
     public void PartData(List<Map> PartList, String jobSignalStatusDevicePhaseId) throws Exception {
-        if(PartList.size() > 0){
-            String id=null;
+        if (PartList.size() > 0) {
+            String id = null;
             int insertDateMonth = Integer.valueOf(DateUtils.currentYearMonth());
-            for (Map Part : PartList){
-                id=AssignUtils.getUUid();
+            for (Map Part : PartList) {
+                id = AssignUtils.getUUid();
                 //加密
                 JobSignalStatusDevicePhasePart part = new JobSignalStatusDevicePhasePart();
                 part.setId(id);
@@ -753,7 +727,7 @@ public class DeviceActionSubscriptionServiceImpl implements DeviceActionSubscrip
                 JobSignalStatusDevicePhasePartMapper.insert(part);
 
                 //非加密
-                JobSignalStatusDevicePhasePartNew partNew=new JobSignalStatusDevicePhasePartNew();
+                JobSignalStatusDevicePhasePartNew partNew = new JobSignalStatusDevicePhasePartNew();
                 partNew.setId(id);
                 partNew.setSignalStatusDevicePhaseId(jobSignalStatusDevicePhaseId);
                 partNew.setSheetName(Part.get("SheetName") == null ? null : Part.get("SheetName").toString());
@@ -766,16 +740,15 @@ public class DeviceActionSubscriptionServiceImpl implements DeviceActionSubscrip
     }
 
 
-
-    @Transactional(rollbackFor = Exception.class,propagation = Propagation.NESTED)
+    @Transactional(rollbackFor = Exception.class, propagation = Propagation.NESTED)
     @Log(title = "jobEventData", businessType = BusinessType.INSERT)
     public void jobEventData(List<Map> jobEventList, String jobSignalStatusDeviceId) throws Exception {
-        if(jobEventList.size() > 0){
-            String id=null;
-            String eventValue=null;  //eventValue转码
+        if (jobEventList.size() > 0) {
+            String id = null;
+            String eventValue = null;  //eventValue转码
             int insertDateMonth = Integer.valueOf(DateUtils.currentYearMonth());
-            for (Map jobEvent : jobEventList){
-                id=AssignUtils.getUUid();
+            for (Map jobEvent : jobEventList) {
+                id = AssignUtils.getUUid();
                 String str = String.valueOf(jobEvent.get("EventID"));
 
                 //加密
@@ -783,11 +756,11 @@ public class DeviceActionSubscriptionServiceImpl implements DeviceActionSubscrip
                 event.setId(id);
                 event.setEventId(AssignUtils.encrypt(AssignUtils.formatValue(str)));
                 event.setSignaStatusDeviceId(jobSignalStatusDeviceId);
-                if(jobEvent.get("EventValue") != null) {
-                    eventValue =URLDecoder.decode(jobEvent.get("EventValue").toString(),"utf-8");
-                    log.info("eventValue:"+eventValue);
+                if (jobEvent.get("EventValue") != null) {
+                    eventValue = URLDecoder.decode(jobEvent.get("EventValue").toString(), "utf-8");
+                    log.info("eventValue:" + eventValue);
                     event.setEventValue(AssignUtils.encrypt(eventValue));
-                }else{
+                } else {
                     event.setEventValue("");
                 }
                 event.setInsertDateMonth(insertDateMonth);
@@ -806,45 +779,44 @@ public class DeviceActionSubscriptionServiceImpl implements DeviceActionSubscrip
         }
     }
 
-    @Transactional(rollbackFor = Exception.class,propagation = Propagation.NESTED)
+    @Transactional(rollbackFor = Exception.class, propagation = Propagation.NESTED)
     @Log(title = "manageNotification", businessType = BusinessType.INSERT)
     public void manageNotification(List<Map> signalNotificationList) throws Exception {
-           if(signalNotificationList!=null && signalNotificationList.size()>0){
-               for(Map signalNotification:signalNotificationList){
-                   //Notification
-                   List<Map> NotificationList = (ArrayList)signalNotification.get("Notification");
-                   if(NotificationList.size()>0){
-                      for(Map notification:NotificationList){
-                          //获取job_id并插入到job_sync_record表中
-                          if(notification.get("JobID")!=null){
-                              int insertDateMonth = Integer.valueOf(DateUtils.currentYearMonth());
-                              JobSyncRecordNew recordNew=new JobSyncRecordNew();
-                              recordNew.setId(AssignUtils.getUUid());
-                              recordNew.setJobId(URLDecoder.decode(notification.get("JobID").toString(),"utf-8"));
-                              recordNew.setSyncStatusJob("N");
-                              recordNew.setSyncStatusWorkstep("N");
-                              recordNew.setCreateTime(new Date());
-                              recordNew.setUpdateTime(new Date());
-                              recordNew.setInsertDateMonth(insertDateMonth);
-                              jobSyncRecordNewMapper.insert(recordNew);
-                          }
-                      }
+        if (signalNotificationList != null && signalNotificationList.size() > 0) {
+            for (Map signalNotification : signalNotificationList) {
+                //Notification
+                List<Map> NotificationList = (ArrayList) signalNotification.get("Notification");
+                if (NotificationList.size() > 0) {
+                    for (Map notification : NotificationList) {
+                        //获取job_id并插入到job_sync_record表中
+                        if (notification.get("JobID") != null) {
+                            int insertDateMonth = Integer.valueOf(DateUtils.currentYearMonth());
+                            JobSyncRecordNew recordNew = new JobSyncRecordNew();
+                            recordNew.setId(AssignUtils.getUUid());
+                            recordNew.setJobId(URLDecoder.decode(notification.get("JobID").toString(), "utf-8"));
+                            recordNew.setSyncStatusJob("N");
+                            recordNew.setSyncStatusWorkstep("N");
+                            recordNew.setCreateTime(new Date());
+                            recordNew.setUpdateTime(new Date());
+                            recordNew.setInsertDateMonth(insertDateMonth);
+                            jobSyncRecordNewMapper.insert(recordNew);
+                        }
+                    }
 
-                   }
-               }
-           }
+                }
+            }
+        }
     }
-
-
 
 
     /**
      * 发送post请求
+     *
      * @param serviceUrl
      * @param map
      * @param authorization
      */
-    public ResponseEntity<String> sendPostFormData(String serviceUrl, MultiValueMap<String, String> map, String authorization) throws Exception{
+    public ResponseEntity<String> sendPostFormData(String serviceUrl, MultiValueMap<String, String> map, String authorization) throws Exception {
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
@@ -858,14 +830,10 @@ public class DeviceActionSubscriptionServiceImpl implements DeviceActionSubscrip
         ResponseEntity<String> responseEntity = restTemplate.exchange(serviceUrl, HttpMethod.POST, entity, String.class);
 
         //System.out.println("3.2.5订阅操作返回值 : "+responseEntity);
-        log.info("3.2.5订阅操作返回值 : "+responseEntity);
+        log.info("3.2.5订阅操作返回值 : " + responseEntity);
 
         return responseEntity;
     }
-
-
-
-
 
 
 }

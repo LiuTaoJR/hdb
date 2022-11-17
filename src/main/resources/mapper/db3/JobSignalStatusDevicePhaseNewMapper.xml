@@ -5,17 +5,13 @@
 <mapper namespace="com.xq.hdb.mapper.db3.JobSignalStatusDevicePhaseNewMapper">
 
 
-
     <select id="getJobPhaseByDeviceInfoId" parameterType="java.lang.String" resultType="java.util.Map">
         select status, job_id from job_signal_status_device_phase
         where
-            signalStatusDeviceId = #{statusDeviceId}
+        signalStatusDeviceId = #{statusDeviceId}
         order by id desc
-            limit 1
+        limit 1
     </select>
-
-
-
 
 
 </mapper>

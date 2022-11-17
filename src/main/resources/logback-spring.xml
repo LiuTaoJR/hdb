@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<configuration  scan="true" scanPeriod="10 seconds">
+<configuration scan="true" scanPeriod="10 seconds">
 
     <contextName>logback</contextName>
     <!-- 格式化输出：%date表⽰⽇期，%thread表⽰线程名，%-5level：级别从左显⽰5个字符宽度 %msg：⽇志消息，%n是换⾏符-->
-    <property name="LOG_PATTERN" value="%date{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n" />
+    <property name="LOG_PATTERN" value="%date{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"/>
     <!-- 控制台输出⽇志 -->
     <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
         <!-- ⽇志级别过滤INFO以下 -->
@@ -87,9 +87,9 @@
 
     <!-- ⽇志输出级别 -->
     <root level="INFO">
-        <appender-ref ref="console" />
-        <appender-ref ref="fileInfoLog" />
-        <appender-ref ref="fileErrorLog" />
+        <appender-ref ref="console"/>
+        <appender-ref ref="fileInfoLog"/>
+        <appender-ref ref="fileErrorLog"/>
     </root>
 
 </configuration>

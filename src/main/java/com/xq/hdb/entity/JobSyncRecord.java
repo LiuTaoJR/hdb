@@ -45,7 +45,7 @@ public class JobSyncRecord {
 
     public static void main(String[] args) {
         Date date = DateUtils.msToDate(1654828508439L);
-        java.text.SimpleDateFormat formatter = new SimpleDateFormat( "yyyy-MM-dd HH:mm:ss");
+        java.text.SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String dates = formatter.format(date);//格式化数据
         System.out.println(dates);
     }

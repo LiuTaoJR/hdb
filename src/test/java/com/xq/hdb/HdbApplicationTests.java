@@ -1,12 +1,17 @@
 package com.xq.hdb;
 
+import com.xq.hdb.entity.decrypt.JobIdTime;
+import com.xq.hdb.mapper.db3.JobIdTimeMapper;
 import com.xq.hdb.mapper.db3.JobSyncRecordNewMapper;
+import com.xq.hdb.utils.DateUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+
 import java.io.UnsupportedEncodingException;
 import java.text.ParseException;;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 @SpringBootTest
@@ -15,23 +20,19 @@ class HdbApplicationTests {
     @Autowired
     private JobSyncRecordNewMapper jobSyncRecordNewMapper;
 
+    @Autowired
+    private JobIdTimeMapper jobIdTimeMapper;
+
     @Test
-    public void aa() throws ParseException, UnsupportedEncodingException {
-//        SimpleDateFormat sd=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-//        Date a=  sd.parse("2022-10-10 10:44:54");
-//        Date b=  sd.parse("2022-10-10 10:48:48");
-//        int c= (int) ((b.getTime() - a.getTime()) / (1000 * 60));
-//        System.out.println(c);
-//        String time="2022-11-01";
-//        int strMonth=Integer.valueOf(time.substring(8,10));
-      List<String> list=new ArrayList<>();
-      list.add("1");
-        list.add("2");
-        System.out.println(list);
+    public void aa()  {
+        JobIdTime jobIdTime = new JobIdTime();
+        jobIdTime.setJobTime("123MGSUK-01DJ(蓝紫)-外箱-XS无批号");
+        jobIdTime.setJobId("23123123123");
+        jobIdTime.setTime("sasdasda");
+        jobIdTime.setCreateTime(new Date());
+        jobIdTimeMapper.insert(jobIdTime);
 
     }
-
-
 
 
 }

@@ -15,9 +15,7 @@ import java.util.List;
  * @date 2022-06-07
  */
 @Mapper
-public interface JobWorkstepTypeMapper extends BaseMapper<JobWorkstepType>{
-
-
+public interface JobWorkstepTypeMapper extends BaseMapper<JobWorkstepType> {
 
 
     Integer deleteTypeByWorkstepId(String workstepId);

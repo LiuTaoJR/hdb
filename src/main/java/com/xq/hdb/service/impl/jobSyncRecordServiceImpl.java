@@ -42,24 +42,23 @@ public class jobSyncRecordServiceImpl extends ServiceImpl<JobSyncRecordMapper, J
         jobSyncRecord.setCreateTime(new Date());
         jobSyncRecord.setUpdateTime(new Date());
         jobSyncRecord.setInsertDateMonth(DateUtils.currentMonth());
-        try{
+        try {
             jobSyncRecordMapper.insert(jobSyncRecord);
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
-            log.error("jobSyncRecordTest方法异常:{}",e.getMessage());
+            log.error("jobSyncRecordTest方法异常:{}", e.getMessage());
         }
     }
-
 
 
     @Override
     public void updateJobId(String jobId) {
 
-        try{
+        try {
             //查看jobId是否已在记录表存在
             int i = jobSyncRecordMapper.isExists(jobId);
-            String id=AssignUtils.getUUid();
-            if(i < 1){
+            String id = AssignUtils.getUUid();
+            if (i < 1) {
                 JobSyncRecord jobSyncRecord = new JobSyncRecord();
                 jobSyncRecord.setId(id);
                 jobSyncRecord.setJobId(jobId);
@@ -70,14 +69,14 @@ public class jobSyncRecordServiceImpl extends ServiceImpl<JobSyncRecordMapper, J
                 jobSyncRecord.setInsertDateMonth(DateUtils.currentMonth());
                 jobSyncRecordMapper.insert(jobSyncRecord);
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
     }
 
     @Override
-    public void updateJobIdNew(String jobId,String time) {
+    public void updateJobIdNew(String jobId, String time) {
         try {
             //先删除sync
             jobSyncRecordNewMapper.delByJobId(jobId);
@@ -91,22 +90,23 @@ public class jobSyncRecordServiceImpl extends ServiceImpl<JobSyncRecordMapper, J
             recordNew.setUpdateTime(new Date());
             recordNew.setInsertDateMonth(DateUtils.currentMonth());
             jobSyncRecordNewMapper.insert(recordNew);
-            log.info("job_sync_record表插入成功"+recordNew);
+            log.info("job_sync_record表插入成功" + recordNew);
 
             //先判断jobIdTime表是否存在
-            List<Map> maps=jobIdTimeMapper.getOnly(jobId,time);
-            if (maps.size()<1){
-                JobIdTime jobIdTime=new JobIdTime();
-                jobIdTime.setJobTime(jobId+time);
+            List<Map> maps = jobIdTimeMapper.getOnly(jobId, time);
+            if (maps.size() < 1) {
+                JobIdTime jobIdTime = new JobIdTime();
+                jobIdTime.setJobTime(jobId + time);
                 jobIdTime.setJobId(jobId);
                 jobIdTime.setTime(time);
+                jobIdTime.setCreateTime(new Date());
                 jobIdTimeMapper.insert(jobIdTime);
-                log.info("job_id_time表插入成功"+jobIdTime);
+                log.info("job_id_time表插入成功" + jobIdTime);
             }
 
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
-            log.error("updateJobIdNew方法异常:{}",e.getMessage());
+            log.error("updateJobIdNew方法异常:{}", e.getMessage());
         }
     }
 

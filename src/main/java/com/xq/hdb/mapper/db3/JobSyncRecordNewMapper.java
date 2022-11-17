@@ -11,6 +11,7 @@ public interface JobSyncRecordNewMapper extends BaseMapper<JobSyncRecordNew> {
 
     /**
      * 校验jobId是否存在
+     *
      * @param jobId
      * @return
      */
@@ -18,6 +19,7 @@ public interface JobSyncRecordNewMapper extends BaseMapper<JobSyncRecordNew> {
 
     /**
      * 根据同步状态获取jobId
+     *
      * @param status
      * @return
      */
@@ -28,6 +30,7 @@ public interface JobSyncRecordNewMapper extends BaseMapper<JobSyncRecordNew> {
 
     /**
      * 根据同步状态获取jobId
+     *
      * @param status
      * @return
      */

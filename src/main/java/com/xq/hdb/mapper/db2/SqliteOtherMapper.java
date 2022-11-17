@@ -10,14 +10,10 @@ import java.util.List;
 public interface SqliteOtherMapper {
 
 
-
-
     List<String> getAllTable();
 
 
-
     void refreshData(@Param("table") String table, @Param("insertDateMonth") Integer insertDateMonth);
-
 
 
     void cutDBFile();

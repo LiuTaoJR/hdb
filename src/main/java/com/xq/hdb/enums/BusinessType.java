@@ -5,8 +5,7 @@ package com.xq.hdb.enums;
  *
  * @author xiqi
  */
-public enum BusinessType
-{
+public enum BusinessType {
     /**
      * 其它
      */

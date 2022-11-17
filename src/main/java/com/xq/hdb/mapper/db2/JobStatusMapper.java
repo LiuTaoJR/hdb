@@ -12,13 +12,10 @@ import org.apache.ibatis.annotations.Mapper;
  * @date 2022-06-07
  */
 @Mapper
-public interface JobStatusMapper extends BaseMapper<JobStatus>{
-
-
+public interface JobStatusMapper extends BaseMapper<JobStatus> {
 
 
     Integer delectJobStatusByjobId(String jobId);
-
 
 
 }

@@ -12,7 +12,6 @@ import org.apache.ibatis.annotations.Mapper;
  * @date 2022-06-07
  */
 @Mapper
-public interface JobSignalResinfoResourcesetResourceMiscconsumableMapper extends BaseMapper<JobSignalResinfoResourcesetResourceMiscconsumable>
-{
+public interface JobSignalResinfoResourcesetResourceMiscconsumableMapper extends BaseMapper<JobSignalResinfoResourcesetResourceMiscconsumable> {
 
 }

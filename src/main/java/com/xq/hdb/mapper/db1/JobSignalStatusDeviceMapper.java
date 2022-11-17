@@ -16,21 +16,16 @@ import java.util.Map;
  * @date 2022-06-07
  */
 @Mapper
-public interface JobSignalStatusDeviceMapper extends BaseMapper<JobSignalStatusDevice>{
-
-
+public interface JobSignalStatusDeviceMapper extends BaseMapper<JobSignalStatusDevice> {
 
 
     List<JobSignalStatusDevice> getStatusDeviceListByStatusId(String signalStatusId);
 
 
-
     List<Map> getDeviceSpeedBySignalStatusId(String signalStatusId);
 
 
-    List<JobSignalStatusDevice> pageList(@Param("a") int a,@Param("b") int b);
-
-
+    List<JobSignalStatusDevice> pageList(@Param("a") int a, @Param("b") int b);
 
 
 }

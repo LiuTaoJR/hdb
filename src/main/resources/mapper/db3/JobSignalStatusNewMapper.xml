@@ -5,30 +5,31 @@
 <mapper namespace="com.xq.hdb.mapper.db3.JobSignalStatusNewMapper">
 
     <resultMap type="com.xq.hdb.vo.DeviceDataVO" id="deviceDataVOResult">
-        <result property="jobId"    column="jobid"    />
-        <result property="startTime"    column="start_time"    />
-        <result property="time"    column="time"    />
-        <result property="activityName"    column="activity_name"    />
-        <result property="activityId"    column="activity_id"    />
-        <result property="eventId"    column="event_id"    />
-        <result property="totalProductionCounter"    column="total_production_counter"    />
-        <result property="productionCounter"    column="production_counter"    />
-        <result property="status"    column="status"    />
-        <result property="statusDetails"    column="status_details"    />
-        <result property="amount"    column="amount"    />
-        <result property="waste"    column="waste"    />
+        <result property="jobId" column="jobid"/>
+        <result property="startTime" column="start_time"/>
+        <result property="time" column="time"/>
+        <result property="activityName" column="activity_name"/>
+        <result property="activityId" column="activity_id"/>
+        <result property="eventId" column="event_id"/>
+        <result property="totalProductionCounter" column="total_production_counter"/>
+        <result property="productionCounter" column="production_counter"/>
+        <result property="status" column="status"/>
+        <result property="statusDetails" column="status_details"/>
+        <result property="amount" column="amount"/>
+        <result property="waste" column="waste"/>
     </resultMap>
 
-   <sql id="deviceDataSql">
-       SELECT CONCAT(jssdp.start_time,jssdp.job_id) as jobid,jssdp.start_time,jssh.time,jssdpa.activity_name,jssdpa.activity_id,jssde.event_id,jssd.total_production_counter,
-              jssd.production_counter,jssd.`status`,jssd.status_details,jssdp.amount,jssdp.waste
-       FROM job_signal_status_header jssh
-                left join job_signal_status jss on jssh.signalStatusId=jss.id
-                left join job_signal_status_device jssd on jss.id=jssd.signalStatusId
-                left join job_signal_status_device_phase jssdp on jssd.id=jssdp.signalStatusDeviceId
-                left join job_signal_status_device_event jssde on jssd.id=jssde.signaStatusDeviceId
-                left join job_signal_status_device_phase_activity jssdpa on jssdp.id=jssdpa.signalStatusDevicePhaseId
-   </sql>
+    <sql id="deviceDataSql">
+        SELECT CONCAT(jssdp.start_time,jssdp.job_id) as
+        jobid,jssdp.start_time,jssh.time,jssdpa.activity_name,jssdpa.activity_id,jssde.event_id,jssd.total_production_counter,
+        jssd.production_counter,jssd.`status`,jssd.status_details,jssdp.amount,jssdp.waste
+        FROM job_signal_status_header jssh
+        left join job_signal_status jss on jssh.signalStatusId=jss.id
+        left join job_signal_status_device jssd on jss.id=jssd.signalStatusId
+        left join job_signal_status_device_phase jssdp on jssd.id=jssdp.signalStatusDeviceId
+        left join job_signal_status_device_event jssde on jssd.id=jssde.signaStatusDeviceId
+        left join job_signal_status_device_phase_activity jssdpa on jssdp.id=jssdpa.signalStatusDevicePhaseId
+    </sql>
 
     <!--根据日期获取数据总数-->
     <select id="getSignalStatusCountByDate" resultType="java.lang.Integer">
@@ -90,7 +91,7 @@
 
 
     <select id="getJobSignalStatus" resultMap="deviceDataVOResult">
-       <include refid="deviceDataSql"></include>
+        <include refid="deviceDataSql"></include>
         <where>
             jssdp.job_id !=''
             <if test="startDate != null  and endDate != null ">
@@ -117,12 +118,12 @@
         ORDER BY jssh.time ASC
     </select>
 
-    <select id="getGroupDeviceJobId"  resultType="java.util.Map">
+    <select id="getGroupDeviceJobId" resultType="java.util.Map">
         SELECT CONCAT(jssdp.start_time,jssdp.job_id) as jobid
-        FROM  job_signal_status_header jssh
-                  left join job_signal_status jss on jssh.signalStatusId=jss.id
-                  left join job_signal_status_device jssd on jss.id=jssd.signalStatusId
-                  left join job_signal_status_device_phase jssdp on jssd.id=jssdp.signalStatusDeviceId
+        FROM job_signal_status_header jssh
+        left join job_signal_status jss on jssh.signalStatusId=jss.id
+        left join job_signal_status_device jssd on jss.id=jssd.signalStatusId
+        left join job_signal_status_device_phase jssdp on jssd.id=jssdp.signalStatusDeviceId
         <where>
             jssdp.job_id !=''
             <if test="startDate != null  and endDate != null ">
@@ -135,7 +136,7 @@
         GROUP BY jobid
     </select>
 
-    <select id="getDeviceByJobId"  resultMap="deviceDataVOResult">
+    <select id="getDeviceByJobId" resultMap="deviceDataVOResult">
         <include refid="deviceDataSql"></include>
         <where>
             jssdp.job_id !=''
@@ -153,8 +154,6 @@
         HAVING jobid = #{jobId}
         ORDER BY jssh.time ASC
     </select>
-
-
 
 
 </mapper>

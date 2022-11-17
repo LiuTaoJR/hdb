@@ -1,7 +1,6 @@
 package com.xq.hdb.config;
 
 
-
 import com.xq.hdb.enums.BusinessType;
 
 import java.lang.annotation.*;
@@ -11,10 +10,10 @@ import java.lang.annotation.*;
  *
  * @author xiqi
  */
-@Target({ ElementType.PARAMETER, ElementType.METHOD })
+@Target({ElementType.PARAMETER, ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-public @interface Log{
+public @interface Log {
 
 
     /**

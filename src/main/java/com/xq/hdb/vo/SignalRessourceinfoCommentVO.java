@@ -10,8 +10,7 @@ import lombok.Data;
  * @date 2022-06-07
  */
 @Data
-public class SignalRessourceinfoCommentVO
-{
+public class SignalRessourceinfoCommentVO {
     private static final long serialVersionUID = 1L;
 
 
@@ -19,7 +18,6 @@ public class SignalRessourceinfoCommentVO
 
 
     private String commentText;
-
 
 
 }

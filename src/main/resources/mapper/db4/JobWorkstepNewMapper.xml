@@ -11,12 +11,12 @@
 
     <!--根据jobId获取-->
     <select id="getPullWorkstepByJobId" resultType="java.util.Map">
-        select job_id, status, device_id, amount_planned, waste_planned, amount_produced, waste_produced, device_id, start, end, DATE_FORMAT(create_time,'%Y-%m-%d %H:%i:%s') as createTime from job_workstep
+        select job_id, status, device_id, amount_planned, waste_planned, amount_produced, waste_produced, device_id,
+        start, end, DATE_FORMAT(create_time,'%Y-%m-%d %H:%i:%s') as createTime from job_workstep
         where
-            job_id = #{jobId}
+        job_id = #{jobId}
         order by create_time desc
     </select>
-
 
 
 </mapper>

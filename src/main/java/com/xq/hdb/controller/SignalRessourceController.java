@@ -15,18 +15,14 @@ import java.util.List;
 public class SignalRessourceController {
 
 
-
     @Autowired
     private SignalRessourceService signalRessourceService;
 
 
-
     @PostMapping("/postPull")
-    public List<SignalRessourceVO> postPullSignalStatus(@RequestBody SignalRessourceVO signalRessourceVO){
+    public List<SignalRessourceVO> postPullSignalStatus(@RequestBody SignalRessourceVO signalRessourceVO) {
         return null;
     }
-
-
 
 
     @GetMapping("/getPull")

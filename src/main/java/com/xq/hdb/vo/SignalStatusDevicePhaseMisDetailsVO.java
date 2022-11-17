@@ -11,14 +11,11 @@ import lombok.Data;
  * @date 2022-06-07
  */
 @Data
-public class SignalStatusDevicePhaseMisDetailsVO
-{
+public class SignalStatusDevicePhaseMisDetailsVO {
     private static final long serialVersionUID = 1L;
 
 
-
     private String WorkType;
-
 
 
 }

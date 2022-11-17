@@ -16,8 +16,7 @@ import java.util.Date;
  *
  * @author xiqi
  */
-public class DateUtils extends org.apache.commons.lang3.time.DateUtils
-{
+public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
     public static String YYYY = "yyyy";
 
     public static String YYYY_MM = "yyyy-MM";
@@ -38,8 +37,7 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils
      *
      * @return Date() 当前日期
      */
-    public static Date getNowDate()
-    {
+    public static Date getNowDate() {
         return new Date();
     }
 
@@ -48,44 +46,34 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils
      *
      * @return String
      */
-    public static String getDate()
-    {
+    public static String getDate() {
         return dateTimeNow(YYYY_MM_DD);
     }
 
-    public static final String getTime()
-    {
+    public static final String getTime() {
         return dateTimeNow(YYYY_MM_DD_HH_MM_SS);
     }
 
-    public static final String dateTimeNow()
-    {
+    public static final String dateTimeNow() {
         return dateTimeNow(YYYYMMDDHHMMSS);
     }
 
-    public static final String dateTimeNow(final String format)
-    {
+    public static final String dateTimeNow(final String format) {
         return parseDateToStr(format, new Date());
     }
 
-    public static final String dateTime(final Date date)
-    {
+    public static final String dateTime(final Date date) {
         return parseDateToStr(YYYY_MM_DD, date);
     }
 
-    public static final String parseDateToStr(final String format, final Date date)
-    {
+    public static final String parseDateToStr(final String format, final Date date) {
         return new SimpleDateFormat(format).format(date);
     }
 
-    public static final Date dateTime(final String format, final String ts)
-    {
-        try
-        {
+    public static final Date dateTime(final String format, final String ts) {
+        try {
             return new SimpleDateFormat(format).parse(ts);
-        }
-        catch (ParseException e)
-        {
+        } catch (ParseException e) {
             throw new RuntimeException(e);
         }
     }
@@ -93,23 +81,21 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils
     /**
      * 日期路径 即年/月/日 如2018/08/08
      */
-    public static final String datePath()
-    {
+    public static final String datePath() {
         Date now = new Date();
-        return DateFormatUtils.format(now, "yyyy/MM/dd");
+        return DateFormatUtils.format(now, "yyyy-MM-dd");
     }
 
     /**
      * 日期路径 即年/月/日 如20180808
      */
-    public static final String dateTime()
-    {
+    public static final String dateTime() {
         Date now = new Date();
         return DateFormatUtils.format(now, "yyyyMMdd");
     }
 
 
-    public static final Integer currentMonth(){
+    public static final Integer currentMonth() {
         Calendar calendar = Calendar.getInstance();
         //记得要+1
         int month = calendar.get(Calendar.MONTH) + 1;
@@ -117,9 +103,9 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils
     }
 
 
-
     /**
      * 获取上个月月份
+     *
      * @return
      */
     public static final String getLastMonth() {
@@ -128,15 +114,15 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils
         Calendar calendar = Calendar.getInstance();
         // 设置为当前时间
         calendar.setTime(date);
-        calendar.add(Calendar.MONTH,-1);
+        calendar.add(Calendar.MONTH, -1);
         date = calendar.getTime();
         return DateFormatUtils.format(date, "yyyyMM");
     }
 
 
-
     /**
      * 获取本月月份
+     *
      * @return
      */
     public static final String currentYearMonth() {
@@ -145,30 +131,22 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils
         Calendar calendar = Calendar.getInstance();
         // 设置为当前时间
         calendar.setTime(date);
-        calendar.add(Calendar.MONTH,-0);
+        calendar.add(Calendar.MONTH, -0);
         date = calendar.getTime();
         return DateFormatUtils.format(date, "yyyyMM");
     }
 
 
-
-
-
     /**
      * 日期型字符串转化为日期 格式
      */
-    public static Date parseDate(Object str)
-    {
-        if (str == null)
-        {
+    public static Date parseDate(Object str) {
+        if (str == null) {
             return null;
         }
-        try
-        {
+        try {
             return parseDate(str.toString(), parsePatterns);
-        }
-        catch (ParseException e)
-        {
+        } catch (ParseException e) {
             return null;
         }
     }
@@ -176,8 +154,7 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils
     /**
      * 获取服务器启动时间
      */
-    public static Date getServerStartDate()
-    {
+    public static Date getServerStartDate() {
         long time = ManagementFactory.getRuntimeMXBean().getStartTime();
         return new Date(time);
     }
@@ -185,16 +162,14 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils
     /**
      * 计算相差天数
      */
-    public static int differentDaysByMillisecond(Date date1, Date date2)
-    {
+    public static int differentDaysByMillisecond(Date date1, Date date2) {
         return Math.abs((int) ((date2.getTime() - date1.getTime()) / (1000 * 3600 * 24)));
     }
 
     /**
      * 计算两个时间差
      */
-    public static String getDatePoor(Date endDate, Date nowDate)
-    {
+    public static String getDatePoor(Date endDate, Date nowDate) {
         long nd = 1000 * 24 * 60 * 60;
         long nh = 1000 * 60 * 60;
         long nm = 1000 * 60;
@@ -215,10 +190,11 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils
 
     /**
      * 带T时间转换
+     *
      * @param timeZone
      * @return
      */
-    public static Date timeZoneToDate(String timeZone){
+    public static Date timeZoneToDate(String timeZone) {
         Date date = null;
         try {
             DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
@@ -232,14 +208,14 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils
     }
 
 
-
     /**
      * 带T时间转换
+     *
      * @param timeZone
      * @return
      */
-    public static String timeZoneToString(String timeZone){
-        if(timeZone.equals("null")){
+    public static String timeZoneToString(String timeZone) {
+        if (timeZone.equals("null")) {
             return null;
         }
         String dateString = null;
@@ -256,8 +232,7 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils
     }
 
 
-
-    public static Date msToDate(Long milliSecond){
+    public static Date msToDate(Long milliSecond) {
         Date date = new Date();
         date.setTime(milliSecond);
         return date;
@@ -266,87 +241,80 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils
 
     /**
      * 获取当天日期毫秒
+     *
      * @param date
      * @return
      */
-    public static Long theDayStart(Date date){
-        if(date == null){
+    public static Long theDayStart(Date date) {
+        if (date == null) {
             return null;
         }
 
         Long ms = 0L;
-        try{
+        try {
             //转成相应格式的字符串
             String dateStr = new SimpleDateFormat("yyyy-MM-dd 00:00:00").format(date);
             //将字符时间转成特定Date
             ms = new SimpleDateFormat("yyyy-MM-dd 00:00:00").parse(dateStr).getTime();
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return ms;
     }
 
 
-
     /**
      * 获取当天日期
+     *
      * @param date
      * @return
      */
-    public static Date getDayStart(Date date){
-        if(date == null){
+    public static Date getDayStart(Date date) {
+        if (date == null) {
             return null;
         }
         Date day = null;
 
-        try{
+        try {
             SimpleDateFormat sdf = new SimpleDateFormat();// 格式化时间
             sdf.applyPattern("yyyy-MM-dd 00:00:00");// a为am/pm的标记
-            String dateStr=sdf.format(date);
+            String dateStr = sdf.format(date);
             SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd");
             day = sdf1.parse(dateStr);
 
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return day;
     }
-
-
 
 
     /**
      * 获取当天日期
+     *
      * @param date
      * @return
      */
-    public static Date getDayEnd(Date date){
+    public static Date getDayEnd(Date date) {
         Date day = null;
         SimpleDateFormat sdf = new SimpleDateFormat();// 格式化时间
         sdf.applyPattern("yyyy-MM-dd 00:00:00");// a为am/pm的标记
-        String dateStr=sdf.format(date);
-        try{
+        String dateStr = sdf.format(date);
+        try {
             SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd");
             day = sdf1.parse(getSpecifiedDayAfter(dateStr));
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return day;
     }
 
 
-
-
     /**
-
      * 获得指定日期的后一天
-
      *
-
      * @param specifiedDay
-
      * @return
-
      */
 
     public static String getSpecifiedDayAfter(String specifiedDay) {
@@ -378,40 +346,44 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils
     }
 
 
-
-
     /**
      * 获取后一天日期毫秒
+     *
      * @param date
      * @return
      */
-    public static Long theDayEnd(Date date){
-        if(date == null){
+    public static Long theDayEnd(Date date) {
+        if (date == null) {
             return null;
         }
-        Long ms = theDayStart(date)+24*60*60*1000 - 1;
+        Long ms = theDayStart(date) + 24 * 60 * 60 * 1000 - 1;
         return ms;
     }
 
     /**
      * 将字符转为日期
+     *
      * @param time
      * @return
      */
     public static String strToDateStr(String time) {
-        String str="";
+        String str = "";
         try {
-            SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
-            SimpleDateFormat sd=new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSX");
-            Date date=sd.parse(time);
-            str=sdf.format(date);
-        } catch(Exception e) {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+            SimpleDateFormat sd = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSX");
+            Date date = sd.parse(time);
+            str = sdf.format(date);
+        } catch (Exception e) {
             return str;
         }
         return str;
     }
 
-
+    public static String dateToStr(Date date) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String strDate=sdf.format(date);
+        return strDate;
+    }
 
 
 }

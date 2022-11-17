@@ -13,8 +13,7 @@ import java.util.List;
  * @date 2022-06-07
  */
 @Data
-public class SignalRessourceinfoResourcesetVO
-{
+public class SignalRessourceinfoResourcesetVO {
 
     private static final long serialVersionUID = 1L;
 

@@ -19,7 +19,7 @@ import java.util.Map;
 public class SwaggerConfig {
     @Bean
     public Docket createRestApi() {
-        Docket docket =new Docket(DocumentationType.SWAGGER_2)
+        Docket docket = new Docket(DocumentationType.SWAGGER_2)
                 .apiInfo(apiInfo())
                 .select()
                 //为当前包路径,控制器类包
@@ -29,6 +29,7 @@ public class SwaggerConfig {
         docket.alternateTypeRules(AlternateTypeRules.newMapRule(String.class, Map.class));
         return docket;
     }
+
     //构建 api文档的详细信息函数,注意这里的注解引用的是哪个
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()

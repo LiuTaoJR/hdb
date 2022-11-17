@@ -14,8 +14,7 @@ import lombok.Data;
  */
 @Data
 @TableName("job_signal_status_device_event")
-public class JobSignalStatusDeviceEvent
-{
+public class JobSignalStatusDeviceEvent {
     private static final long serialVersionUID = 1L;
 
     @TableId("id")

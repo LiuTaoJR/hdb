@@ -15,12 +15,10 @@ import org.springframework.web.client.RestTemplate;
 public class ResTemplateConfig {
 
 
-
     @Bean
     public RestTemplate restTemplate(ClientHttpRequestFactory factory) {
         return new RestTemplate(factory);
     }
-
 
 
     @Bean

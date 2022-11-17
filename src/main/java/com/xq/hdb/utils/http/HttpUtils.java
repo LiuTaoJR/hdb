@@ -35,33 +35,28 @@ public class HttpUtils {
     private static final Logger log = LoggerFactory.getLogger(com.xq.hdb.utils.http.HttpUtils.class);
 
 
-
-
-
-
-
     /**
      * 向指定 URL 发送GET方法的请求
      *
-     * @param url 发送请求的 URL
+     * @param url   发送请求的 URL
      * @param param 请求参数，请求参数应该是 name1=value1&name2=value2 的形式。
      * @return 所代表远程资源的响应结果
      */
-    public static String sendGet(String url, String param, String authorization)
-    {
+    public static String sendGet(String url, String param, String authorization) {
         return sendGet(url, param, Constants.UTF8, authorization);
     }
 
 
     /**
      * 向指定 URL 发送GET方法的请求  返回map对象
+     *
      * @param url
      * @param param
      * @return
      */
     public static Map<String, Object> sendGetReturnMap(String url, String param, String authorization) {
         Gson gson = new Gson();
-        String result = sendGet(url, param, Constants.UTF8,authorization);
+        String result = sendGet(url, param, Constants.UTF8, authorization);
 
         System.out.println("这是3.1.x定时任务拉取的数据" + result);
 
@@ -74,6 +69,7 @@ public class HttpUtils {
 
     /**
      * 向指定 URL 发送GET方法的请求  返回map对象
+     *
      * @param url
      * @param param
      * @return
@@ -88,26 +84,22 @@ public class HttpUtils {
     }
 
 
-
-
     /**
      * 向指定 URL 发送GET方法的请求
      *
-     * @param url 发送请求的 URL
-     * @param param 请求参数，请求参数应该是 name1=value1&name2=value2 的形式。
+     * @param url         发送请求的 URL
+     * @param param       请求参数，请求参数应该是 name1=value1&name2=value2 的形式。
      * @param contentType 编码类型
      * @return 所代表远程资源的响应结果
      */
-    public static String sendGet(String url, String param, String contentType,String authorization)
-    {
+    public static String sendGet(String url, String param, String contentType, String authorization) {
         StringBuilder result = new StringBuilder();
         BufferedReader in = null;
         String urlNameString = null;
-        try
-        {
-            if(StringUtils.isNotEmpty(param)){
+        try {
+            if (StringUtils.isNotEmpty(param)) {
                 urlNameString = url + "?" + param;
-            }else{
+            } else {
                 urlNameString = url;
             }
 
@@ -117,49 +109,34 @@ public class HttpUtils {
             connection.setRequestProperty("accept", "*/*");
             connection.setRequestProperty("connection", "Keep-Alive");
             connection.setRequestProperty("user-agent", "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1;SV1)");
-            if(StringUtils.isNotEmpty(authorization)){
+            if (StringUtils.isNotEmpty(authorization)) {
                 connection.setRequestProperty("Authorization", authorization);
             }
             connection.connect();
             in = new BufferedReader(new InputStreamReader(connection.getInputStream(), contentType));
             String line;
-            while ((line = in.readLine()) != null)
-            {
+            while ((line = in.readLine()) != null) {
                 result.append(line);
             }
             log.info("recv - {}", result);
-        }
-        catch (ConnectException e)
-        {
+        } catch (ConnectException e) {
             e.printStackTrace();
             log.error("调用HttpUtils.sendGet ConnectException, url=" + url + ",param=" + param, e);
-        }
-        catch (SocketTimeoutException e)
-        {
+        } catch (SocketTimeoutException e) {
             e.printStackTrace();
             log.error("调用HttpUtils.sendGet SocketTimeoutException, url=" + url + ",param=" + param, e);
-        }
-        catch (IOException e)
-        {
+        } catch (IOException e) {
             e.printStackTrace();
             log.error("调用HttpUtils.sendGet IOException, url=" + url + ",param=" + param, e);
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
             log.error("调用HttpsUtil.sendGet Exception, url=" + url + ",param=" + param, e);
-        }
-        finally
-        {
-            try
-            {
-                if (in != null)
-                {
+        } finally {
+            try {
+                if (in != null) {
                     in.close();
                 }
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
 
                 log.error("调用in.close Exception, url=" + url + ",param=" + param, ex);
             }
@@ -168,16 +145,14 @@ public class HttpUtils {
     }
 
 
-
-
     /**
      * 向指定 URL 发送POST方法的请求
      *
-     * @param url 发送请求的 URL
+     * @param url   发送请求的 URL
      * @param param 请求参数，请求参数应该是 name1=value1&name2=value2 的形式。
      * @return 所代表远程资源的响应结果
      */
-    public static String sendPost(String url, String param){
+    public static String sendPost(String url, String param) {
 
         PrintWriter out = null;
         BufferedReader in = null;
@@ -199,43 +174,27 @@ public class HttpUtils {
             out.flush();
             in = new BufferedReader(new InputStreamReader(conn.getInputStream(), "utf-8"));
             String line;
-            while ((line = in.readLine()) != null)
-            {
+            while ((line = in.readLine()) != null) {
                 result.append(line);
             }
             log.info("recv - {}", result);
-        }
-        catch (ConnectException e)
-        {
+        } catch (ConnectException e) {
             log.error("调用HttpUtils.sendPost ConnectException, url=" + url + ",param=" + param, e);
-        }
-        catch (SocketTimeoutException e)
-        {
+        } catch (SocketTimeoutException e) {
             log.error("调用HttpUtils.sendPost SocketTimeoutException, url=" + url + ",param=" + param, e);
-        }
-        catch (IOException e)
-        {
+        } catch (IOException e) {
             log.error("调用HttpUtils.sendPost IOException, url=" + url + ",param=" + param, e);
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             log.error("调用HttpsUtil.sendPost Exception, url=" + url + ",param=" + param, e);
-        }
-        finally
-        {
-            try
-            {
-                if (out != null)
-                {
+        } finally {
+            try {
+                if (out != null) {
                     out.close();
                 }
-                if (in != null)
-                {
+                if (in != null) {
                     in.close();
                 }
-            }
-            catch (IOException ex)
-            {
+            } catch (IOException ex) {
                 log.error("调用in.close Exception, url=" + url + ",param=" + param, ex);
             }
         }
@@ -244,12 +203,10 @@ public class HttpUtils {
     }
 
 
-
-
     /**
      * 向指定 URL 发送POST方法的请求,存在异常时抛出
      *
-     * @param url 发送请求的 URL
+     * @param url   发送请求的 URL
      * @param param 请求参数，请求参数应该是 name1=value1&name2=value2 的形式。
      * @return 所代表远程资源的响应结果
      */
@@ -263,7 +220,7 @@ public class HttpUtils {
         URL realUrl = new URL(urlNameString);
         URLConnection conn = realUrl.openConnection();
 
-        if(StringUtils.isNotEmpty(authorization)){
+        if (StringUtils.isNotEmpty(authorization)) {
             conn.setRequestProperty("Authorization", authorization);
         }
         conn.setRequestProperty("accept", "application/json,application/xml,application/xhtml+xml,text/html,text/xml,text/plain");
@@ -279,17 +236,16 @@ public class HttpUtils {
         out.flush();
         in = new BufferedReader(new InputStreamReader(conn.getInputStream(), "utf-8"));
         String line;
-        while ((line = in.readLine()) != null)
-        {
+        while ((line = in.readLine()) != null) {
             result.append(line);
         }
         log.info("recv - {}", result);
 
 
-        if (out != null){
+        if (out != null) {
             out.close();
         }
-        if (in != null){
+        if (in != null) {
             in.close();
         }
 
@@ -297,26 +253,20 @@ public class HttpUtils {
     }
 
 
-
-
-    public static String xxx(){
+    public static String xxx() {
 
 
         return "";
     }
 
 
-
-
-    public static String sendSSLPost(String url, String param)
-    {
+    public static String sendSSLPost(String url, String param) {
         StringBuilder result = new StringBuilder();
         String urlNameString = url + "?" + param;
-        try
-        {
+        try {
             log.info("sendSSLPost - {}", urlNameString);
             SSLContext sc = SSLContext.getInstance("SSL");
-            sc.init(null, new TrustManager[] { new TrustAnyTrustManager() }, new java.security.SecureRandom());
+            sc.init(null, new TrustManager[]{new TrustAnyTrustManager()}, new java.security.SecureRandom());
             URL console = new URL(urlNameString);
             HttpsURLConnection conn = (HttpsURLConnection) console.openConnection();
             conn.setRequestProperty("accept", "*/*");
@@ -333,66 +283,47 @@ public class HttpUtils {
             InputStream is = conn.getInputStream();
             BufferedReader br = new BufferedReader(new InputStreamReader(is));
             String ret = "";
-            while ((ret = br.readLine()) != null)
-            {
-                if (ret != null && !ret.trim().equals(""))
-                {
+            while ((ret = br.readLine()) != null) {
+                if (ret != null && !ret.trim().equals("")) {
                     result.append(new String(ret.getBytes("ISO-8859-1"), "utf-8"));
                 }
             }
             log.info("recv - {}", result);
             conn.disconnect();
             br.close();
-        }
-        catch (ConnectException e)
-        {
+        } catch (ConnectException e) {
             log.error("调用HttpUtils.sendSSLPost ConnectException, url=" + url + ",param=" + param, e);
-        }
-        catch (SocketTimeoutException e)
-        {
+        } catch (SocketTimeoutException e) {
             log.error("调用HttpUtils.sendSSLPost SocketTimeoutException, url=" + url + ",param=" + param, e);
-        }
-        catch (IOException e)
-        {
+        } catch (IOException e) {
             log.error("调用HttpUtils.sendSSLPost IOException, url=" + url + ",param=" + param, e);
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             log.error("调用HttpsUtil.sendSSLPost Exception, url=" + url + ",param=" + param, e);
         }
         return result.toString();
     }
 
-    private static class TrustAnyTrustManager implements X509TrustManager
-    {
+    private static class TrustAnyTrustManager implements X509TrustManager {
         @Override
-        public void checkClientTrusted(X509Certificate[] chain, String authType)
-        {
+        public void checkClientTrusted(X509Certificate[] chain, String authType) {
         }
 
         @Override
-        public void checkServerTrusted(X509Certificate[] chain, String authType)
-        {
+        public void checkServerTrusted(X509Certificate[] chain, String authType) {
         }
 
         @Override
-        public X509Certificate[] getAcceptedIssuers()
-        {
-            return new X509Certificate[] {};
+        public X509Certificate[] getAcceptedIssuers() {
+            return new X509Certificate[]{};
         }
     }
 
-    private static class TrustAnyHostnameVerifier implements HostnameVerifier
-    {
+    private static class TrustAnyHostnameVerifier implements HostnameVerifier {
         @Override
-        public boolean verify(String hostname, SSLSession session)
-        {
+        public boolean verify(String hostname, SSLSession session) {
             return true;
         }
     }
-
-
-
 
 
     public static void RestTemplateTestPost(String url, String authorization, JSONObject requestMap) throws Exception {
@@ -418,14 +349,6 @@ public class HttpUtils {
         JSONObject body = restTemplate.postForObject(url, entity, JSONObject.class);
 
     }
-
-
-
-
-
-
-
-
 
 
 }

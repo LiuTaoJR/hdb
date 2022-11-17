@@ -11,9 +11,9 @@ import java.util.Map;
 public interface JobService extends IService<Job> {
 
 
-
     /**
      * job插库测试
+     *
      * @param jsonStr
      * @return
      */
@@ -26,14 +26,11 @@ public interface JobService extends IService<Job> {
     void pullJob();
 
 
-
     Map getJobByJobId(String jobId);
 
 
     //解密
     Object decryption(String str);
-
-
 
 
 }

@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
+
 @Slf4j
 @Controller
 @RequestMapping("/job")
@@ -20,24 +21,17 @@ public class JobController {
     private JobService jobService;
 
 
-
     @PostMapping("/jobInsert")
     @ResponseBody
-    public Map jobInsert(@RequestBody String jsonStr){
+    public Map jobInsert(@RequestBody String jsonStr) {
         return jobService.jobInsert(jsonStr);
     }
 
 
-
-
-
-
     @PostMapping("/postPull")
-    public List<JobVO> postPullSignalStatus(@RequestBody JobVO jobVO){
+    public List<JobVO> postPullSignalStatus(@RequestBody JobVO jobVO) {
         return null;
     }
-
-
 
 
     @GetMapping("/getPull")
@@ -51,13 +45,10 @@ public class JobController {
     }
 
 
-
-
     @GetMapping("/getJobByJobId")
-    public Map getJobByJobId(String jobId){
+    public Map getJobByJobId(String jobId) {
         return jobService.getJobByJobId(jobId);
     }
-
 
 
 }

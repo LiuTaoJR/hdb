@@ -12,7 +12,6 @@ import org.apache.ibatis.annotations.Mapper;
  * @date 2022-06-07
  */
 @Mapper
-public interface JobStatusMilestonesMapper extends BaseMapper<JobStatusMilestones>
-{
+public interface JobStatusMilestonesMapper extends BaseMapper<JobStatusMilestones> {
 
 }

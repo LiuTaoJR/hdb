@@ -7,12 +7,10 @@ import lombok.Data;
 public class JobSequencesVO {
 
 
-
     private String name;
 
 
     private String type;
-
 
 
 }

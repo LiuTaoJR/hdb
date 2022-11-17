@@ -24,7 +24,7 @@ public class Db1DataSourceConfig {
 
     @Bean("db1DataSource")
     @ConfigurationProperties(prefix = "spring.datasource.db1") //读取application.yml中的配置参数映射成为一个对象
-    public DataSource getDb1DataSource(){
+    public DataSource getDb1DataSource() {
         return DataSourceBuilder.create().build();
     }
 
@@ -39,7 +39,7 @@ public class Db1DataSourceConfig {
     }
 
     @Bean("db1SqlSessionTemplate")
-    public SqlSessionTemplate db1SqlSessionTemplate(@Qualifier("db1SqlSessionFactory") SqlSessionFactory sqlSessionFactory){
+    public SqlSessionTemplate db1SqlSessionTemplate(@Qualifier("db1SqlSessionFactory") SqlSessionFactory sqlSessionFactory) {
         return new SqlSessionTemplate(sqlSessionFactory);
     }
 

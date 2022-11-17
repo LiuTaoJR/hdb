@@ -5,11 +5,10 @@
 <mapper namespace="com.xq.hdb.mapper.db1.JobSignalStatusDevicePhaseActivityMapper">
 
 
-    <select id="pageList" parameterType="java.lang.Integer" resultType="com.xq.hdb.entity.JobSignalStatusDevicePhaseActivity" >
+    <select id="pageList" parameterType="java.lang.Integer"
+            resultType="com.xq.hdb.entity.JobSignalStatusDevicePhaseActivity">
         select * from job_signal_status_device_phase_activity limit #{a},#{b}
     </select>
-
-
 
 
 </mapper>

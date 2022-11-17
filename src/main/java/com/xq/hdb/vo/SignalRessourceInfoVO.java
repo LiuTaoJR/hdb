@@ -12,10 +12,8 @@ import java.util.List;
  * @date 2022-06-07
  */
 @Data
-public class SignalRessourceInfoVO
-{
+public class SignalRessourceInfoVO {
     private static final long serialVersionUID = 1L;
-
 
 
     private Enum Status;

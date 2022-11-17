@@ -21,13 +21,13 @@ public class SqliteUtils {
 
     public static String backupByMonth(String sqliteDBUrl, String backupDBUrl) throws Exception {
         //复制数据库至新位置
-        String newPath = backupDBUrl+"/hdb_other"+ DateUtils.getLastMonth()+".db";
+        String newPath = backupDBUrl + "/hdb_other" + DateUtils.getLastMonth() + ".db";
         String code = FileUtils.copySingleFile(sqliteDBUrl, newPath);
-        if(!code.equals("200")){
+        if (!code.equals("200")) {
             return "复制文件出错";
         }
 
-        try{
+        try {
             //加载数据库驱动
             Class.forName("org.sqlite.JDBC");
             //连接目标数据库
@@ -40,12 +40,12 @@ public class SqliteUtils {
             ResultSet allTableName = stmt.executeQuery(allTableSql);
 
             List<String> tableNamelist = new ArrayList();
-            while(allTableName.next()){
+            while (allTableName.next()) {
                 tableNamelist.add(allTableName.getString(1));
             }
 
-            for(String tableName : tableNamelist){
-                String dataRefreshd = "delete from "+ tableName + " where insert_date_month != " + DateUtils.getLastMonth() ;
+            for (String tableName : tableNamelist) {
+                String dataRefreshd = "delete from " + tableName + " where insert_date_month != " + DateUtils.getLastMonth();
                 stmt.executeUpdate(dataRefreshd);
             }
 
@@ -54,7 +54,7 @@ public class SqliteUtils {
 
             stmt.close();
             conn.close();
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             return "操作备份数据库出错";
         }
@@ -62,8 +62,6 @@ public class SqliteUtils {
         return "200";
 
     }
-
-
 
 
 }

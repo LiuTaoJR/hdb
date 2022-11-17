@@ -10,7 +10,6 @@ import java.util.List;
 public class SignalStatusDeviceInfoVO {
 
 
-
     private String DeviceID;
 
 
@@ -41,7 +40,6 @@ public class SignalStatusDeviceInfoVO {
 
 
     private List<SignalStatusDeviceEventVO> Event;
-
 
 
 }

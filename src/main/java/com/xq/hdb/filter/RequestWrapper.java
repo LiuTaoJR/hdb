@@ -47,10 +47,10 @@ public class RequestWrapper extends HttpServletRequestWrapper {
                 String[] var4 = nameAndVals;
                 int var5 = nameAndVals.length;
 
-                for(int var6 = 0; var6 < var5; ++var6) {
+                for (int var6 = 0; var6 < var5; ++var6) {
                     String nameAndVal = var4[var6];
                     String[] nameVal = nameAndVal.split("=");
-                    List existVal = (List)params.get(nameVal[0]);
+                    List existVal = (List) params.get(nameVal[0]);
                     if (existVal != null) {
                         existVal.add(nameVal.length > 1 ? nameVal[1] : "");
                     } else {
@@ -62,9 +62,9 @@ public class RequestWrapper extends HttpServletRequestWrapper {
             this.parameterMap = new HashMap();
             Iterator var10 = params.keySet().iterator();
 
-            while(var10.hasNext()) {
-                String key = (String)var10.next();
-                this.parameterMap.put(key, (String[])((String[])((List)params.get(key)).toArray()));
+            while (var10.hasNext()) {
+                String key = (String) var10.next();
+                this.parameterMap.put(key, (String[]) ((String[]) ((List) params.get(key)).toArray()));
             }
         } else {
             this.parameterMap = super.getParameterMap();
@@ -86,10 +86,10 @@ public class RequestWrapper extends HttpServletRequestWrapper {
             String[] var4 = queryParams;
             int var5 = queryParams.length;
 
-            for(int var6 = 0; var6 < var5; ++var6) {
+            for (int var6 = 0; var6 < var5; ++var6) {
                 String queryParam = var4[var6];
                 String[] paramAndValue = queryParam.split("=");
-                List<String> existVal = (List)result.get(paramAndValue[0]);
+                List<String> existVal = (List) result.get(paramAndValue[0]);
                 if (existVal != null) {
                     existVal.add(paramAndValue.length > 1 ? paramAndValue[1] : "");
                 } else {
@@ -128,7 +128,7 @@ public class RequestWrapper extends HttpServletRequestWrapper {
             boolean var3 = false;
 
             int len;
-            while((len = in.read(bytes)) != -1) {
+            while ((len = in.read(bytes)) != -1) {
                 this.outputStream.write(bytes, 0, len);
             }
         } catch (IOException var4) {
@@ -145,8 +145,8 @@ public class RequestWrapper extends HttpServletRequestWrapper {
                 this.cacheParamMap();
             }
 
-            String[] values = (String[])this.parameterMap.get(name);
-            return values != null && values.length >= 1 ? ((String[])this.parameterMap.get(name))[0] : null;
+            String[] values = (String[]) this.parameterMap.get(name);
+            return values != null && values.length >= 1 ? ((String[]) this.parameterMap.get(name))[0] : null;
         }
     }
 
@@ -185,7 +185,7 @@ public class RequestWrapper extends HttpServletRequestWrapper {
                 this.cacheParamMap();
             }
 
-            return (String[])this.parameterMap.get(name);
+            return (String[]) this.parameterMap.get(name);
         }
     }
 

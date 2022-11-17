@@ -11,7 +11,7 @@
     <groupId>com.xq</groupId>
     <artifactId>hdb</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-<!--    <packaging>war</packaging>-->
+    <!--    <packaging>war</packaging>-->
     <packaging>jar</packaging>
     <name>hdb</name>
     <description>interface for hdb</description>
@@ -19,7 +19,6 @@
     <properties>
         <java.version>1.8</java.version>
     </properties>
-
 
 
     <dependencies>
@@ -211,8 +210,6 @@
                     <warName>${project.artifactId}</warName>
                 </configuration>
             </plugin>
-
-
 
 
         </plugins>

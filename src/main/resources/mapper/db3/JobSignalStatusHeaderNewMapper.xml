@@ -8,44 +8,44 @@
     <select id="getHeaderBySignalStatusId" parameterType="java.lang.String" resultType="java.util.Map">
         select device_id from job_signal_status_header
         where
-            signalStatusId = #{signalStatusId}
+        signalStatusId = #{signalStatusId}
         order by create_time desc
-            limit 1
+        limit 1
     </select>
 
     <!--之前是data_time-->
-    <select id="getTimeByStatusIdAndDeviceId"  resultType="java.util.Date">
+    <select id="getTimeByStatusIdAndDeviceId" resultType="java.util.Date">
         select time from job_signal_status_header
         where
-            signalStatusId = #{signalStatusId}
-          and device_id = #{deviceId}
+        signalStatusId = #{signalStatusId}
+        and device_id = #{deviceId}
         order by id desc
-            limit 1
+        limit 1
     </select>
 
-<!--    <select id="getCreateTimeByStatusIdAndDeviceId"  resultType="java.util.Date">-->
-<!--        select create_time from job_signal_status_header-->
-<!--        where-->
-<!--            signalStatusId = #{signalStatusId}-->
-<!--          and device_id = #{deviceId}-->
-<!--        order by id desc-->
-<!--            limit 1-->
-<!--    </select>-->
+    <!--    <select id="getCreateTimeByStatusIdAndDeviceId"  resultType="java.util.Date">-->
+    <!--        select create_time from job_signal_status_header-->
+    <!--        where-->
+    <!--            signalStatusId = #{signalStatusId}-->
+    <!--          and device_id = #{deviceId}-->
+    <!--        order by id desc-->
+    <!--            limit 1-->
+    <!--    </select>-->
 
-    <select id="getCreateTimeByStatusIdAndDeviceId"  resultType="java.util.Date">
+    <select id="getCreateTimeByStatusIdAndDeviceId" resultType="java.util.Date">
         SELECT jss.create_time as create_time from job_signal_status_header jssh
         left join job_signal_status jss on jssh.signalStatusId=jss.id
         where jssh.signalStatusId= #{signalStatusId}
         and jssh.device_id= #{deviceId}
         order by jssh.id desc
-            limit 1
+        limit 1
     </select>
 
     <select id="getStatisticsDate" parameterType="java.lang.String" resultType="java.util.Map">
         SELECT jssh.time from job_signal_status_header jssh
-           left join job_signal_status jss on jssh.signalStatusId=jss.id
-           left join job_signal_status_device jssd on jss.id=jssd.signalStatusId
-           left join job_signal_status_device_event jssde on jssd.id=jssde.signaStatusDeviceId
+        left join job_signal_status jss on jssh.signalStatusId=jss.id
+        left join job_signal_status_device jssd on jss.id=jssd.signalStatusId
+        left join job_signal_status_device_event jssde on jssd.id=jssde.signaStatusDeviceId
         <where>
             <if test="deviceId != null  and deviceId != ''">
                 and jssh.device_id = #{deviceId}
@@ -60,7 +60,6 @@
         order by jssh.time desc
 
     </select>
-
 
 
 </mapper>

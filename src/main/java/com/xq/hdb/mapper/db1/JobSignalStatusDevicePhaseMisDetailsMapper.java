@@ -15,7 +15,6 @@ import java.util.List;
  * @date 2022-06-07
  */
 @Mapper
-public interface JobSignalStatusDevicePhaseMisDetailsMapper extends BaseMapper<JobSignalStatusDevicePhaseMisDetails>
-{
-   List<JobSignalStatusDevicePhaseMisDetails> pageList(@Param("a") int a, @Param("b") int b);
+public interface JobSignalStatusDevicePhaseMisDetailsMapper extends BaseMapper<JobSignalStatusDevicePhaseMisDetails> {
+    List<JobSignalStatusDevicePhaseMisDetails> pageList(@Param("a") int a, @Param("b") int b);
 }

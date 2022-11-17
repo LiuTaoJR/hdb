@@ -4,14 +4,74 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.xq.hdb.mapper.db3.JobSignalStatusDeviceNewMapper">
 
+    <resultMap type="com.xq.hdb.vo.DeviceDataVO" id="deviceDataVOResult">
+        <result property="jobId" column="job_id"/>
+        <result property="time" column="time"/>
+        <result property="totalProductionCounter" column="total_production_counter"/>
+        <result property="productionCounter" column="production_counter"/>
+        <result property="status" column="status"/>
+        <result property="statusDetails" column="status_details"/>
+        <result property="speed" column="speed"/>
+    </resultMap>
+
+    <sql id="deviceDataSql">
+        SELECT jssh.time,jssd.total_production_counter,
+               jssd.production_counter,jssd.`status`,jssd.status_details,jssd.device_id as job_id,jssd.speed
+        FROM job_signal_status_header jssh
+                 left join job_signal_status jss on jssh.signalStatusId=jss.id
+                 left join job_signal_status_device jssd on jss.id=jssd.signalStatusId
+    </sql>
+
 
     <select id="getDeviceSpeedBySignalStatusId" parameterType="java.lang.String" resultType="java.util.Map">
         select id, speed, event_id from job_signal_status_device
         where
-            signalStatusId = #{signalStatusId}
+        signalStatusId = #{signalStatusId}
         order by id desc
-            limit 1
+        limit 1
     </select>
+
+
+    <select id="getDeviceSpeedGroup"  resultType="java.util.Map">
+        SELECT jssd.device_id,jssd.speed,jssh.time from job_signal_status_device jssd
+        left join job_signal_status jss on jssd.signalStatusId=jss.id
+        left join job_signal_status_header jssh on jss.id=jssh.signalStatusId
+        <where>
+            jssd.speed !=''
+            <if test="startDate != null  and endDate != null ">
+                and jssh.time between #{startDate} and #{endDate}
+            </if>
+        </where>
+        GROUP BY jssd.device_id
+    </select>
+
+    <select id="getGroupDevice" resultType="java.util.Map">
+        SELECT jssh.device_id
+        FROM job_signal_status_header jssh
+        left join job_signal_status jss on jssh.signalStatusId=jss.id
+        left join job_signal_status_device jssd on jss.id=jssd.signalStatusId
+        <where>
+            <if test="startDate != null  and endDate != null ">
+                and jssh.time between #{startDate} and #{endDate}
+            </if>
+        </where>
+        GROUP BY jssh.device_id
+    </select>
+
+    <select id="getPrintAmountByDeviceId" resultMap="deviceDataVOResult">
+        <include refid="deviceDataSql"></include>
+        <where>
+            jssd.total_production_counter !=''
+            <if test="startDate != null  and endDate != null ">
+                and jssh.time between #{startDate} and #{endDate}
+            </if>
+            <if test="deviceId != null and deviceId != ''">
+                and jssh.device_id =#{deviceId}
+            </if>
+        </where>
+        ORDER BY jssh.time ASC
+    </select>
+
 
 
 </mapper>

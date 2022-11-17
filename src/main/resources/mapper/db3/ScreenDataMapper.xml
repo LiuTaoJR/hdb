@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xq.hdb.mapper.db3.ScreenDataMapper">
+
+   <delete id="removeScreenByTime" >
+       delete from screen_data where query_time = #{time}
+   </delete>
+
+    <select id="getScreenData" resultType="java.util.Map">
+        SELECT sum(product_good_amount) as amount,concat(MONTH(query_time),'月') as month
+        from screen_data
+        where DATE_SUB(date(#{time}), INTERVAL 12 MONTH) <![CDATA[ <= ]]>  date(query_time)
+        and date(query_time)  <![CDATA[ <= ]]>  date(#{time})
+        GROUP BY month
+        ORDER BY query_time ASC
+    </select>
+
+
+</mapper>

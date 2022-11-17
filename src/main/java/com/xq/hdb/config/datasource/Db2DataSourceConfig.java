@@ -24,7 +24,7 @@ public class Db2DataSourceConfig {
 
     @Bean("db2DataSource")
     @ConfigurationProperties(prefix = "spring.datasource.db2") //读取application.yml中的配置参数映射成为一个对象
-    public DataSource getDb2DataSource(){
+    public DataSource getDb2DataSource() {
         return DataSourceBuilder.create().build();
     }
 
@@ -39,7 +39,7 @@ public class Db2DataSourceConfig {
     }
 
     @Bean("db2SqlSessionTemplate")
-    public SqlSessionTemplate db2SqlSessionTemplate(@Qualifier("db2SqlSessionFactory") SqlSessionFactory sqlSessionFactory){
+    public SqlSessionTemplate db2SqlSessionTemplate(@Qualifier("db2SqlSessionFactory") SqlSessionFactory sqlSessionFactory) {
         return new SqlSessionTemplate(sqlSessionFactory);
     }
 

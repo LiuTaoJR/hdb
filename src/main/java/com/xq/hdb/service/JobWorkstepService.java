@@ -15,9 +15,6 @@ import java.util.Map;
 public interface JobWorkstepService extends IService<JobWorkstep> {
 
 
-
-
-
     Map workstepInsert(@RequestBody String jsonStr);
 
 
@@ -27,33 +24,22 @@ public interface JobWorkstepService extends IService<JobWorkstep> {
     void pullWorkstep();
 
 
-
     /**
      * post——josn  拉取数据
+     *
      * @param workstepVO
      * @return
      */
     List<WorkstepVO> postPullWorkstep(WorkstepVO workstepVO);
 
 
-
-
-
-    Map getPullWorkstep(String jobId,String status,String deviceId, Date start, Date end);
-
-
+    Map getPullWorkstep(String jobId, String status, String deviceId, Date start, Date end);
 
 
     Map getPullWorkstepByDate(Date date);
 
 
-
-
     Map getPullWorkstepByJobId(String jobId);
-
-
-
-
 
 
 }

@@ -8,6 +8,7 @@ public interface DeviceActionSubscriptionService {
 
     /**
      * 设备行动订阅
+     *
      * @param action
      * @param url
      * @param type
@@ -17,7 +18,6 @@ public interface DeviceActionSubscriptionService {
 
 
     /**
-     *
      * @param jsonStr
      */
     String dealSignal(String jsonStr);

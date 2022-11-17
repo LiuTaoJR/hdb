@@ -5,26 +5,20 @@
 <mapper namespace="com.xq.hdb.mapper.db3.JobIdTimeMapper">
 
     <select id="getJobIdTime" resultType="java.util.Map">
-        select jit.job_id as jobId from job_id_time jit
+        select job_id as jobId from job_id_time
         <where>
             <if test="startDate != null  and endDate != null ">
-                and jit.time between #{startDate} and #{endDate}
+                and create_time between #{startDate} and #{endDate}
             </if>
         </where>
-        group by jit.job_id
-        ORDER BY jit.time ASC
+        group by job_id
+        ORDER BY create_time ASC
     </select>
 
     <select id="getOnly" resultType="java.util.Map">
-       select * from job_id_time
-       where job_id=#{jobId} and time=#{time}
+        select * from job_id_time
+        where job_id=#{jobId} and time=#{time}
     </select>
-
-
-
-
-
-
 
 
 </mapper>

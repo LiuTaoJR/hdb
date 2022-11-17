@@ -1,7 +1,6 @@
 package com.xq.hdb.vo;
 
 
-
 import lombok.Data;
 
 import java.util.List;
@@ -13,8 +12,7 @@ import java.util.List;
  * @date 2022-06-07
  */
 @Data
-public class SignalResourcesetResourceVO
-{
+public class SignalResourcesetResourceVO {
 
     private static final long serialVersionUID = 1L;
 

@@ -3,6 +3,7 @@ package com.xq.hdb.entity.decrypt;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
+import java.util.Date;
 
 @Data
 @TableName("job_id_time")
@@ -16,4 +17,7 @@ public class JobIdTime {
 
     @TableField("time")
     private String time;
+
+    @TableField("create_time")
+    private Date createTime;
 }

@@ -23,63 +23,62 @@ public class AssignUtils {
     private HdbConstantConfig hdbConstantConfig;
 
 
-
-    public static String idAssign(Object value){
+    public static String idAssign(Object value) {
         String result = null;
-        if(value==null || value.equals("")){
+        if (value == null || value.equals("")) {
             result = UUID.randomUUID().toString();
-        }else{
+        } else {
             result = String.valueOf(value);
         }
         return result;
     }
 
 
-    public static String StringAssign(Object value){
+    public static String StringAssign(Object value) {
         String result = "未知";
-        try{
-            if(value==null || value.equals("")){
+        try {
+            if (value == null || value.equals("")) {
                 result = "未知";
-            }else{
+            } else {
                 result = String.valueOf(value);
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return result;
     }
-
 
 
     /**
      * 加密操作
+     *
      * @param value
      * @return
      */
-    public static String encrypt(Object value){
+    public static String encrypt(Object value) {
         String result = "";
-        try{
-            result = (value==null || value.equals(""))? null : DESUtils.encrypt(String.valueOf(value), publicKey);
-        }catch (Exception e){
+        try {
+            result = (value == null || value.equals("")) ? null : DESUtils.encrypt(String.valueOf(value), publicKey);
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return result;
     }
 
 
-
     /**
      * 解密成String
+     *
      * @param value
      * @return
      */
-    public static String decryptionToStr(Object value){
+    public static String decryptionToStr(Object value) {
         String result = "";
-        try{
-            if(!(value==null || value.equals("") || value.equals("未知") || value.equals("null"))){
+        try {
+            if (!(value == null || value.equals("") || value.equals("未知") || value.equals("null"))) {
                 result = DESUtils.decrypt(String.valueOf(value), publicKey);
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return result;
@@ -88,41 +87,41 @@ public class AssignUtils {
 
     /**
      * 解密成Long
+     *
      * @param value
      * @return
      */
-    public static Long decryptionToLong(String value){
+    public static Long decryptionToLong(String value) {
         Long result = null;
-        try{
-            if(!(value==null || value.equals("") || value.equals("未知") || value.equals("null"))){
+        try {
+            if (!(value == null || value.equals("") || value.equals("未知") || value.equals("null"))) {
                 String x = DESUtils.decrypt(value, publicKey);
                 Boolean b = x.contains(".");
-                if(b){
-                    String str1=x.substring(0, x.indexOf("."));
+                if (b) {
+                    String str1 = x.substring(0, x.indexOf("."));
                     result = Long.valueOf(str1);
-                }else{
+                } else {
                     result = Long.valueOf(x);
                 }
 
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return result;
     }
 
 
-
-
     /**
      * 解密成Date
+     *
      * @param value
      * @return
      */
-    public static Date decryptionToDate(String value){
+    public static Date decryptionToDate(String value) {
 
-        try{
-            if(!(value==null || value.equals("") || value.equals("未知") || value.equals("null"))){
+        try {
+            if (!(value == null || value.equals("") || value.equals("未知") || value.equals("null"))) {
                 String result = DESUtils.decrypt(value, publicKey);
                 //处理带T时间
                 DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
@@ -130,75 +129,73 @@ public class AssignUtils {
 
                 return date;
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
     }
 
 
-
-
     /**
      * 参数加密操作
+     *
      * @param value
      * @return
      */
-    public static String paramEncrypt(Object value){
+    public static String paramEncrypt(Object value) {
         String result = null;
-        try{
-            result = (value==null || value.equals(""))? null : DESUtils.encrypt(String.valueOf(value), publicKey);
-        }catch (Exception e){
+        try {
+            result = (value == null || value.equals("")) ? null : DESUtils.encrypt(String.valueOf(value), publicKey);
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return result;
     }
 
 
-
-    public static String formatValue(String str){
+    public static String formatValue(String str) {
         String result = str;
 
         //纯数字
-        if(containNumber(result)){
+        if (containNumber(result)) {
             //格式化
-            switch (result.length()){
+            switch (result.length()) {
                 case 1:
-                    result = "10000"+ result;
+                    result = "10000" + result;
                     break;
                 case 2:
-                    result = "1000"+ result;
+                    result = "1000" + result;
                     break;
                 case 3:
-                    result = "100"+ result;
+                    result = "100" + result;
                     break;
                 case 4:
-                    result = "10"+ result;
+                    result = "10" + result;
                     break;
                 case 5:
-                    result = "1"+ result;
+                    result = "1" + result;
                     break;
             }
             return result;
-        }else if(str.contains("@")){
+        } else if (str.contains("@")) {
             //不为纯数字且有"@"
             result = str.replace("@", "");
             //格式化
-            switch (result.length()){
+            switch (result.length()) {
                 case 1:
-                    result = "20000"+ result;
+                    result = "20000" + result;
                     break;
                 case 2:
-                    result = "2000"+ result;
+                    result = "2000" + result;
                     break;
                 case 3:
-                    result = "200"+ result;
+                    result = "200" + result;
                     break;
                 case 4:
-                    result = "20"+ result;
+                    result = "20" + result;
                     break;
                 case 5:
-                    result = "2"+ result;
+                    result = "2" + result;
                     break;
             }
             return result;
@@ -208,9 +205,9 @@ public class AssignUtils {
     }
 
 
-    public static Boolean containNumber(String str){
-        for (int i = 0; i < str.length(); i++){
-            if (!Character.isDigit(str.charAt(i))){
+    public static Boolean containNumber(String str) {
+        for (int i = 0; i < str.length(); i++) {
+            if (!Character.isDigit(str.charAt(i))) {
                 return false;
             }
         }
@@ -218,23 +215,23 @@ public class AssignUtils {
     }
 
 
-
-
     /**
      * 生成不带"-"的uuid
+     *
      * @return
      */
-    public static String getUUid(){
+    public static String getUUid() {
         String s = UUID.randomUUID().toString();
         return s.replace("-", "");
     }
 
     /**
      * 转为utf-8的字符串
+     *
      * @param string
      * @return
      */
-    public  static String toUtf8String(String string) {
+    public static String toUtf8String(String string) {
         StringBuilder stringBuilder = new StringBuilder();
         for (int i = 0; i < string.length(); i++) {
             char c = string.charAt(i);

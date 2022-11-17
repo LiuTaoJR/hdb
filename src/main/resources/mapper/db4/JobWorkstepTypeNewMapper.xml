@@ -5,14 +5,9 @@
 <mapper namespace="com.xq.hdb.mapper.db4.JobWorkstepTypeNewMapper">
 
 
-
-
     <delete id="deleteTypeByWorkstepId">
         delete from job_workstep_type where workstepId = #{workstepId}
     </delete>
-
-
-
 
 
 </mapper>

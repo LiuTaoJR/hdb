@@ -27,15 +27,11 @@ public interface JobSignalStatusNewMapper extends BaseMapper<JobSignalStatusNew>
     List<DeviceDataVO> getProductWaste(@Param("startDate") Date startDate, @Param("endDate") Date endDate, @Param("deviceId") String deviceId, @Param("activityName") String activityName);
 
 
-
-
-
-
     //分组查询设备信息的jobId
     List<Map> getGroupDeviceJobId(@Param("startDate") Date startDate, @Param("endDate") Date endDate, @Param("deviceId") String deviceId);
 
     //查询分组后的jobId设备数据
-    List<DeviceDataVO> getDeviceByJobId(@Param("startDate") Date startDate, @Param("endDate") Date endDate, @Param("deviceId") String deviceId,@Param("jobId") String jobId,@Param("activityName") String activityName);
+    List<DeviceDataVO> getDeviceByJobId(@Param("startDate") Date startDate, @Param("endDate") Date endDate, @Param("deviceId") String deviceId, @Param("jobId") String jobId, @Param("activityName") String activityName);
 
 
 }
